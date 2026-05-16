@@ -7,5 +7,5 @@
 3. run `npm run:dev editor` to launch the application
 
 ### Dependencies
-* Node 24?
-* NPM ?????
+* Node 22.15 or greater
+* NPM
