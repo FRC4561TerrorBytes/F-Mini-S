@@ -13,8 +13,8 @@ const teamsPath = './src/electron/dataStorage/teams.json'
  * @param optionsNum - the amount of options in the output array you want
  * @returns Returns possible options for a match in an array made of two arrays, [Matches total, Matches per team]
  */
-export function matchOptions( optionsNum : number){
-    const teams = JSON.parse(jsonToString(teamsPath));
+export async function matchOptions( optionsNum : number){
+    const teams = JSON.parse( await jsonToString(teamsPath));
 
     const optionAmount = optionsNum;
     const roundsPerTeamOptions = new Array(optionAmount).fill(1);
@@ -48,17 +48,17 @@ export function matchOptions( optionsNum : number){
  * @returns A Match[] containing match
  */
 export async function getAndUpdateMatchSchedule(matchesPerTeam : number, totalMatches : number){
-    let schedule
-    generateMatchSchedule(matchesPerTeam, totalMatches).then(schedule = JSON.parse(jsonToString(matchSchedulePath)));
-    
-    return schedule;
+
+    await generateMatchSchedule(matchesPerTeam, totalMatches);
+  
+    return JSON.parse( await jsonToString(matchSchedulePath));
 }
 
 /**
  * @returns match schedule
  */
-export function getMatchSchedule(){
-    return JSON.parse(jsonToString(matchSchedulePath));
+export async function getMatchSchedule(){
+    return JSON.parse( await jsonToString(matchSchedulePath));
 }
 
 /**
@@ -71,7 +71,7 @@ export async function generateMatchSchedule(matchesPerTeam : number, totalMatche
 
     let attmepts = 0;
 
-    while(!end && attmepts < 100){
+    while(!end && attmepts < totalMatches*2){
         attmepts++;
         try{
             end = true;
@@ -90,7 +90,7 @@ export async function generateMatchSchedule(matchesPerTeam : number, totalMatche
  */
 async function generateMatchScheduleAttempt(totalMatches : number, matchesPerTeam : number){
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     type Match = {
         number: number,
@@ -113,6 +113,13 @@ async function generateMatchScheduleAttempt(totalMatches : number, matchesPerTea
     const teamNumArr = new Array(teams.length);
     //Needs an if statement to check if there are less than 12 teams, if less some teams will have back to back matches
     for(let i = 0; i < teamNumArr.length; i++) { teamNumArr[i] = teams[i].number; }
+
+    const teamSkillMap : Map<number,number> = new Map();
+
+    for(let i = 0; i < teams.length; i++){
+
+        teamSkillMap.set(teams[i].number, await getTeamSkill(teams[i].number));
+    }
 
     const teamsLeft: number[] = [];
 
@@ -142,7 +149,7 @@ async function generateMatchScheduleAttempt(totalMatches : number, matchesPerTea
             let count = 0;
             while (alliance.length < 6) {
 
-                if(count >= 1000 * (matchesPerTeam/Math.pow(teams.length,0.8))){
+                if(count >= (teamsLeft.length*2)+5){
                     throw new Error("Generate match stuck in loop");
                 }
                 const team = teamsLeft[0];
@@ -158,6 +165,76 @@ async function generateMatchScheduleAttempt(totalMatches : number, matchesPerTea
                 } else {
                     teamsLeft.push(teamsLeft.shift()!);
                 }
+
+                if(alliance.length == 6){
+
+                    const tolerance = 3 
+                    const redSum = (teamSkillMap.get(alliance[0])??1) + (teamSkillMap.get(alliance[1])??1) + (teamSkillMap.get(alliance[2])??1);
+                    const blueSum = (teamSkillMap.get(alliance[3])??1) + (teamSkillMap.get(alliance[4])??1) + (teamSkillMap.get(alliance[5])??1);
+
+                    if(!(redSum + tolerance >= blueSum) && !(redSum - tolerance <= blueSum)){
+
+                       const redTo15 = 15 - redSum;
+                       const redTo3 = redSum - 3;
+                       const blueTo15 = 15 - blueSum;
+                       const blueTo3 = blueSum - 3;
+
+                       const vals = [redTo15, redTo3, blueTo15, blueTo3];
+
+                       let minDex = 0;
+
+                       for(let i = 0; i < vals.length; i++){
+
+                            if(vals[i] < vals[minDex])
+                                minDex = i;
+                       }
+
+                       switch(minDex){
+
+                            case 0:{
+                                let maxTeam = 0;
+                                for(let i = 0; i < 3; i++){
+                                    if((teamSkillMap.get(alliance[i])?? 0) > (teamSkillMap.get(alliance[maxTeam])?? 0))
+                                        maxTeam = i;
+                                }
+                                teamsLeft.push(alliance[maxTeam]);
+                                alliance.splice(maxTeam,1);
+                            } break;
+
+                            case 1:{
+                                let minTeam = 0;
+                                for(let i = 0; i < 3; i++){
+                                    if((teamSkillMap.get(alliance[i])?? 0) < (teamSkillMap.get(alliance[minTeam])?? 0))
+                                        minTeam = i;
+                                }
+                                teamsLeft.push(alliance[minTeam]);
+                                alliance.splice(minTeam,1);
+                            } break;
+
+                            case 2:{
+                                let maxTeam = 3;
+                                for(let i = 3; i < 6; i++){
+                                    if((teamSkillMap.get(alliance[i])?? 0) > (teamSkillMap.get(alliance[maxTeam])?? 0))
+                                        maxTeam = i;
+                                }
+                                teamsLeft.push(alliance[maxTeam]);
+                                alliance.splice(maxTeam,1);
+                            } break;
+
+                            case 3:{
+                                let minTeam = 3;
+                                for(let i = 3; i < 6; i++){
+                                    if((teamSkillMap.get(alliance[i])?? 0) < (teamSkillMap.get(alliance[minTeam])?? 0))
+                                        minTeam = i;
+                                }
+                                teamsLeft.push(alliance[minTeam]);
+                                alliance.splice(minTeam,1);
+                            } break;
+                       }
+
+                    }
+                    
+                }
                 count++;
             }
 
@@ -169,14 +246,7 @@ async function generateMatchScheduleAttempt(totalMatches : number, matchesPerTea
             blueAlliance: [alliance[3],alliance[4],alliance[5]]
             });
 
-            //make work :(
-            if(matchCounter > 1){
-                const tolerance = 3 
-                const redSum = getTeamSkill(teamsLastMatch[0]) + getTeamSkill(teamsLastMatch[1]) + getTeamSkill(teamsLastMatch[2]);
-                const blueSum = getTeamSkill(teamsLastMatch[3]) + getTeamSkill(teamsLastMatch[4]) + getTeamSkill(teamsLastMatch[5]);
-                if(!(redSum + tolerance >= blueSum) && !(redSum - tolerance <= blueSum))
-                    throw new Error("Team skill not within tolerance");
-            }
+            
         }
     safeWriteJSON(matchSchedulePath, matches);
 }

@@ -1,10 +1,272 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-.mirrorButton{
-  background-color: darkgray;
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.vid {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+.center-dis {
+  width: max-content;
+  background: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.logo {
+  position: absolute;
+  left: 28vw;
+  margin: 0;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.match-des {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.scoreboard-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  justify-content: center;
+}
+
+.center-info {
+  background: transparent; 
+  width: 16vw;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.time {
+  margin: 0;
+  padding: 10px; 
+  font-size: 3vw;
+  white-space: nowrap;
+  font-weight: 800;
+  font-family: monospace;
+  letter-spacing: -1px;
+  color: #000;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  width: 100%; 
+}
+
+.period-info {
+  width: 100%; 
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  gap: 5vw;
+  font-size: 0.6vw;
+  font-weight: 600; 
+  color: #000;       
+  background: #fff;  
+  padding: 8px; 
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.period, .period-time {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.period-time{
+  background: #999;
+  padding: 3%;
+}
+
+.red-info, .blue-info {
+  width: 17vw;
+  display: flex;
+  align-items: stretch;
+  padding-top: 20px;
+  flex-shrink: 0;
+}
+
+.red{
+  width: 17vw;
+  background: #722; 
+}
+
+.red-info {
+  background: #c22;
+  flex-direction: row;
+}
+
+.blue{
+  width: 17vw;
+  background: #227;
+}
+
+.blue-info {
+  background: #22c;
+  flex-direction: row-reverse; 
+}
+
+.red-name, .blue-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 10px;
+  color: #e2e8f0;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.red-teams-box, .blue-teams-box {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  row-gap: 10px;
+}
+
+.red-teams, .blue-teams {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+  padding: 10px;
+}
+
+.red-teams{
+  background: #c22;
+}
+
+.blue-teams{
+  background: #22c;
+}
+
+.red-score-box, .blue-score-box{
+  flex-grow: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  min-width: 6vw;
+  width:fit-content;
+  padding: 10px;
+}
+
+.red-score, .blue-score {
+  display: flex;
+  justify-self: center;
+  margin: 0;
+  font-weight: 900;
+  color: #fff;
+  font-size: auto;
+}
+
+.fuel-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.red-fuel, .blue-fuel {
+  margin: 0;
+  font-size: 2vw;
+  font-weight: 750;
+  color: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-right: 1vw;
+}
+
+.red-fuel {
+  background: #c22;
+}
+
+.red-balls, .blue-balls{
+  background: #fff;
+  height: 7vh;
+  align-self: stretch;
+  margin-right: 10px;
+}
+
+.red-balls{
+  filter:brightness(1.5);
+}
+
+.blue-balls{
+  filter:brightness(1.5);
+}
+
+.blue-fuel {
+  background: #22c;
+}
+
+.red-active {
+  position: relative;
+  height: 6vh;
+  width: auto;
+  animation: pulseGlow 0.5s infinite ease-in-out;
+}
+
+.blue-active {
+  position: relative;
+  height: 6vh;
+  width: auto;
+  animation: pulseGlow 0.5s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { filter: brightness(0.5);}
+  50% { filter: brightness(0.8); }
 }

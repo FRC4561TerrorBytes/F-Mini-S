@@ -11,29 +11,29 @@ const matchResultsPath = './src/electron/dataStorage/matchResults.json';
  * @param redFuelScored 
  * @param redEndClimbsL1
  * @param redEndClimbsL2
- * @param redEndClimbsL3
+ * @param redEndPark
  * @param redAutoClimbs 
  * @param bluePoints 
  * @param blueFuelScored 
  * @param blueEndClimbsL1
  * @param blueEndClimbsL2 
- * @param blueEndClimbsL3 
+ * @param blueEndPark 
  * @param blueAutoClimbs 
  */
-export function addRebuiltMatchResult(matchNum : number, matchType : string,
-    redPoints : number,  redFuelScored : number, redEndClimbsL1 : number, redEndClimbsL2 : number, redEndClimbsL3 : number, redAutoClimbs : number, redAutoFuelScored : number,
-    bluePoints : number,  blueFuelScored : number, blueEndClimbsL1 : number, blueEndClimbsL2 : number, blueEndClimbsL3 : number, blueAutoClimbs : number, blueAutoFuelScored : number
+export async function addRebuiltMatchResult(matchNum : number, matchType : string,
+    redPoints : number,  redFuelScored : number, redEndClimbsL1 : number, redEndClimbsL2 : number, redEndPark : number, redAutoClimbs : number, redAutoFuelScored : number, redFouls: number, redTFouls: number,
+    bluePoints : number,  blueFuelScored : number, blueEndClimbsL1 : number, blueEndClimbsL2 : number, blueEndPark : number, blueAutoClimbs : number, blueAutoFuelScored : number, blueFouls : number, blueTFouls : number
 ){
 
     let matchResults = [];
 
-    const rawResults = jsonToString(matchResultsPath);
+    const rawResults = await jsonToString(matchResultsPath);
 
     if (rawResults && rawResults.trim().length > 0) {
         matchResults = JSON.parse(rawResults);
     }
 
-    const matchSchedule = JSON.parse(jsonToString(matchSchedulePath));
+    const matchSchedule = JSON.parse(await jsonToString(matchSchedulePath));
     
 
     type matchResultFile = {
@@ -51,7 +51,9 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
                 autoClimbs: number,
                 endClimbsL1: number,
                 endClimbsL2: number,
-                endClimbsL3: number,
+                endPark: number,
+                fouls: number,
+                TechFouls: number,
                 energizedRP: boolean,
                 superchargedRP: boolean,
                 traversalRP: boolean,
@@ -66,7 +68,9 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
                 autoClimbs: number,
                 endClimbsL1: number,
                 endClimbsL2: number,
-                endClimbsL3: number,
+                endPark: number,
+                fouls: number,
+                TechFouls: number,
                 energizedRP: boolean,
                 superchargedRP: boolean,
                 traversalRP: boolean,
@@ -87,19 +91,19 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
     
     let redEnergizedRP = false
 
-    if(redFuelScored >= 100)
+    if(redFuelScored >= 50)
         redEnergizedRP = true;
 
     let redSuperChargedRP = false
 
-    if(redFuelScored >= 360)
+    if(redFuelScored >= 100)
         redSuperChargedRP = true;
 
-    const redClimbPoints = 15*redAutoClimbs + 10*redEndClimbsL1 + 20*redEndClimbsL2 + 30*redEndClimbsL3;
+    const redClimbPoints = 15*redAutoClimbs + 10*redEndClimbsL1 + 30*redEndClimbsL2 + 5*redEndPark;
 
     let redTraversalRP = false
 
-    if(redClimbPoints >= 50)
+    if(redClimbPoints >= 30)
         redTraversalRP = true;
 
     let redWin = false;
@@ -118,24 +122,24 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
 
     let blueEnergizedRP = false
 
-    if(blueFuelScored >= 100)
+    if(blueFuelScored >= 50)
         blueEnergizedRP = true;
 
     let blueSuperChargedRP = false
 
-    if(blueFuelScored >= 360)
+    if(blueFuelScored >= 100)
         blueSuperChargedRP = true;
 
-    const blueClimbPoints = 15*blueAutoClimbs + 10*blueEndClimbsL1 + 20*blueEndClimbsL2 + 30*blueEndClimbsL3;
+    const blueClimbPoints = 15*blueAutoClimbs + 10*blueEndClimbsL1 + 20*blueEndClimbsL2 + 5*blueEndPark;
 
     let blueTraversalRP = false
 
-    if(blueClimbPoints >= 50)
+    if(blueClimbPoints >= 30)
         blueTraversalRP = true;
 
 
 
-    const matchIndex = findMatchIndex(matchNum);
+    const matchIndex = await findMatchIndex(matchNum);
 
 
     if(matchIndex == -1)
@@ -156,7 +160,9 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
                 autoClimbs: redAutoClimbs,
                 endClimbsL1: redEndClimbsL1,
                 endClimbsL2: redEndClimbsL2,
-                endClimbsL3: redEndClimbsL3,
+                endPark: redEndPark,
+                fouls: redFouls,
+                TechFouls: redTFouls,
                 energizedRP: redEnergizedRP,
                 superchargedRP: redSuperChargedRP,
                 traversalRP: redTraversalRP,
@@ -171,7 +177,9 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
                 autoClimbs: blueAutoClimbs,
                 endClimbsL1: blueEndClimbsL1,
                 endClimbsL2: blueEndClimbsL2,
-                endClimbsL3: blueEndClimbsL3,
+                endPark: blueEndPark,
+                fouls: blueFouls,
+                TechFouls: blueTFouls,
                 energizedRP: blueEnergizedRP,
                 superchargedRP: blueSuperChargedRP,
                 traversalRP: blueTraversalRP,
@@ -210,14 +218,14 @@ export function addRebuiltMatchResult(matchNum : number, matchType : string,
  * @param matchNum - number of the match you want the winner of
  * @returns - a string saying red or blue, depending on winner, or tie if tie
  */
-export function getWinningColor(matchNum : number){
+export async function getWinningColor(matchNum : number){
 
-    const matchIndex = findMatchIndex(matchNum);
+    const matchIndex = await findMatchIndex(matchNum);
 
     if(matchIndex == -1)
         return null;
 
-    const matchResults = JSON.parse(jsonToString(matchResultsPath));
+    const matchResults = JSON.parse(await jsonToString(matchResultsPath));
 
     if(matchResults[matchIndex].alliance[0].win)
         return "red";
@@ -233,14 +241,14 @@ export function getWinningColor(matchNum : number){
  * @param allianceColor - type the color of the allliance, string of clolr, "blue" , "red"
  * @returns - an array of the 3 losing teams on alliance
  */
-export function getAlliance(matchNum : number, allianceColor : string){
+export async function getAlliance(matchNum : number, allianceColor : string){
 
-    const matchIndex = findMatchIndex(matchNum);
+    const matchIndex = await findMatchIndex(matchNum);
 
     if(matchIndex == -1)
         return null;
 
-    const matchResults = JSON.parse(jsonToString(matchResultsPath));
+    const matchResults = JSON.parse(await jsonToString(matchResultsPath));
 
     let colorIndex = 0;
     if(allianceColor == "blue")
@@ -264,14 +272,14 @@ export function getAlliance(matchNum : number, allianceColor : string){
  * @param hour - the hour you want to change to
  * @param minute - the minute you want to change to
  */
-export function updateTime(matchNum : number, day : number, month : number, year : number, hour :number, minute : number){
+export async function updateTime(matchNum : number, day : number, month : number, year : number, hour :number, minute : number){
 
-    const matchIndex = findMatchIndex(matchNum);
+    const matchIndex = await findMatchIndex(matchNum);
 
     if(matchIndex == -1)
         return;
 
-    const matchResults = JSON.parse(jsonToString(matchResultsPath));
+    const matchResults = JSON.parse(await jsonToString(matchResultsPath));
 
     matchResults[matchIndex].time[0] = day;
     matchResults[matchIndex].time[1] = month;
@@ -288,14 +296,14 @@ export function updateTime(matchNum : number, day : number, month : number, year
  * @param matchNum - the match num you want to change
  * @param newFuelScored - the new amount of fuel scored
  */
-export function updateFuelScored(color : string, matchNum : number, newFuelScored : number){
+export async function updateFuelScored(color : string, matchNum : number, newFuelScored : number){
 
-    const matchIndex = findMatchIndex(matchNum);
+    const matchIndex = await findMatchIndex(matchNum);
 
     if(matchIndex == -1)
         return;
 
-    const matchResults = JSON.parse(jsonToString(matchResultsPath));
+    const matchResults = JSON.parse(await jsonToString(matchResultsPath));
 
     let colorIndex = 0;
 
@@ -314,14 +322,14 @@ export function updateFuelScored(color : string, matchNum : number, newFuelScore
  * @param matchNum - the mantch num ytou want to make a change to
  * @param newClimbsScored - the amount of climbvsw alliance has now
  */
-export function updateClimbs(color : string, level : number, matchNum : number, newClimbsScored : number){
+export async function updateClimbs(color : string, level : number, matchNum : number, newClimbsScored : number){
 
-     const matchIndex = findMatchIndex(matchNum);
+     const matchIndex = await findMatchIndex(matchNum);
 
     if(matchIndex == -1)
         return;
 
-    const matchResults = JSON.parse(jsonToString(matchResultsPath));
+    const matchResults = JSON.parse(await jsonToString(matchResultsPath));
 
     let colorIndex = 0;
 
@@ -343,9 +351,9 @@ export function updateClimbs(color : string, level : number, matchNum : number, 
  * The match that was last recorded in matchResults.json
  * @returns the match number of last played match, if there arn't returns 0;
  */
-export function getLastMatchNumber(){
+export async function getLastMatchNumber(){
 
-    const raw = jsonToString(matchResultsPath);
+    const raw = await jsonToString(matchResultsPath);
 
     if (!raw || raw.trim().length === 0) {
         return 0;
@@ -360,9 +368,9 @@ export function getLastMatchNumber(){
  * The match that was last recorded in matchResults.json
  * @returns the match type of last played match, if there arn't returns null;
  */
-export function getLastMatchType(){
+export async function getLastMatchType(){
 
-    const raw = jsonToString(matchResultsPath);
+    const raw = await jsonToString(matchResultsPath);
 
     if (!raw || raw.trim().length === 0) {
         return 0;
@@ -373,9 +381,9 @@ export function getLastMatchType(){
     return matchResults[matchResults.length-1].matchType;
 }
 
-function findMatchIndex(matchNum : number){
+async function findMatchIndex(matchNum : number){
 
-    const raw = jsonToString(matchSchedulePath);
+    const raw = await jsonToString(matchSchedulePath);
 
     if (!raw || raw.trim().length === 0) {
         return -1;

@@ -125,7 +125,7 @@
 }
 
 .dropdown-content.open {
-  max-height: 200px; /* adjust if needed */
+  max-height: 200px;
   opacity: 1;
 }
 

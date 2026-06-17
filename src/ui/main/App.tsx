@@ -14,6 +14,7 @@ function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
   const [isOpen, setIsOpen] = useState(false);
 
+  
   const screens = {
     menu: <Menu />,
     teams: <Teams />,

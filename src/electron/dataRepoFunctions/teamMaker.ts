@@ -15,7 +15,7 @@ type teamFile = {
  * @param name - Teams Name
  * @param skill - Skill level on a scale from 1 to 5
  */
-export function addTeam( number : number, name : string, skill : number){
+export async function addTeam( number : number, name : string, skill : number){
 
     type teamFile = {
         number : number,
@@ -33,7 +33,7 @@ export function addTeam( number : number, name : string, skill : number){
         return;
     }
 
-    const teamsString = jsonToString(teamsPath);
+    const teamsString = await jsonToString(teamsPath);
 
     type teamListFile = teamFile[];
 
@@ -44,7 +44,7 @@ export function addTeam( number : number, name : string, skill : number){
         return;
     }
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse( await jsonToString(teamsPath));
 
     // if(teams.length == 1){
     //     teams.push(team);
@@ -76,7 +76,7 @@ export function addTeam( number : number, name : string, skill : number){
  * wrties the teams array provided stright to the teams file
  * @param teams - TeamInput[] type
  */
-export function writeNewTeamJson(teams : teamFile[]){
+export async function writeNewTeamJson(teams : teamFile[]){
     safeWriteJSON(teamsPath, teams);
 }
 
@@ -85,10 +85,10 @@ export function writeNewTeamJson(teams : teamFile[]){
  * @param teamNum - the team number you want to change
  * @param teamName - the name you would like to cahnge the team to
  */
-export function updateTeamName( teamNum : number, teamName : string){
+export async function updateTeamName( teamNum : number, teamName : string){
 
     if(teamName == ""){return}
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse( await jsonToString(teamsPath));
 
     let index = 0;
 
@@ -112,11 +112,11 @@ export function updateTeamName( teamNum : number, teamName : string){
  * @param teamNum - the teams number you would like to change
  * @param teamSkill - the teams skill level you would like to change on a scale of 1-5
  */
-export function updateTeamSkill( teamNum : number, teamSkill : number){
+export async function updateTeamSkill( teamNum : number, teamSkill : number){
 
     if(!(teamSkill > 0 && teamSkill < 6)){return}
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     let index = 0;
 
@@ -139,9 +139,9 @@ export function updateTeamSkill( teamNum : number, teamSkill : number){
  * Removes a team from the teams.json
  * @param teamNumber - team number you want to remove
  */
-export function removeTeam(teamNumber : number){
+export async function removeTeam(teamNumber : number){
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     type teamFile = {
         number : number,
@@ -173,9 +173,9 @@ export function removeTeam(teamNumber : number){
  * @param teamNum - The team number you want the name of
  * @returns - the team name requested
  */
-export function getTeamName(teamNum : number){
+export async function getTeamName(teamNum : number){
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     for(let i = 0; i < teams.length; i++){
 
@@ -191,9 +191,9 @@ export function getTeamName(teamNum : number){
  * @param teamNum - the team number uou want the skill level of
  * @returns return the skill level requested
  */
-export function getTeamSkill(teamNum : number){
+export async function getTeamSkill(teamNum : number){
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     for(let i = 0; i < teams.length; i++){
 
@@ -207,11 +207,11 @@ export function getTeamSkill(teamNum : number){
 /**
  * returns a list of all teams numbers
  */
-export function getTeamNumList(){
+export async function getTeamNumList(){
 
     const nums : number[] = [];
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     for(let i = 0; i < teams.length; i++){
 
@@ -224,11 +224,11 @@ export function getTeamNumList(){
 /**
  * returns a list of all teams names
  */
-export function getTeamNamesList(){
+export async function getTeamNamesList(){
 
     const names : string[] = [];
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     for(let i = 0; i < teams.length; i++){
 
@@ -241,11 +241,11 @@ export function getTeamNamesList(){
 /**
  * returns a list of all teams skills
  */
-export function getTeamSkillList(){
+export async function getTeamSkillList(){
 
     const skills : number[] = [];
 
-    const teams = JSON.parse(jsonToString(teamsPath));
+    const teams = JSON.parse(await jsonToString(teamsPath));
 
     for(let i = 0; i < teams.length; i++){
 
