@@ -111,7 +111,7 @@ async function generateMatchScheduleAttempt(totalMatches : number, matchesPerTea
     */
 
     const teamNumArr = new Array(teams.length);
-    //Needs an if statement to check if there are less than 12 teams, if less some teams will have back to back matches
+   
     for(let i = 0; i < teamNumArr.length; i++) { teamNumArr[i] = teams[i].number; }
 
     const teamSkillMap : Map<number,number> = new Map();

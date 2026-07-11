@@ -48,7 +48,7 @@ body, html {
 
 .logo {
   position: absolute;
-  left: 28vw;
+  left: 21vw;
   margin: 0;
   font-size: 14px;
   text-transform: uppercase;
@@ -74,18 +74,18 @@ body, html {
 }
 
 .center-info {
-  background: transparent; 
+  background: transparent;
   width: 16vw;
   display: flex;
-  flex-direction: column; 
-  align-items: center;
-  gap: 2px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   flex-shrink: 0;
 }
 
 .time {
   margin: 0;
-  padding: 10px; 
+  padding: 10px;
   font-size: 3vw;
   white-space: nowrap;
   font-weight: 800;
@@ -93,63 +93,114 @@ body, html {
   letter-spacing: -1px;
   color: #000;
   background: #fff;
+
   display: flex;
   justify-content: center;
-  width: 100%; 
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
 }
 
-.period-info {
-  width: 100%; 
+.period-info-show {
+  width: 100%;
   z-index: 200;
   display: flex;
   justify-content: center;
   gap: 5vw;
   font-size: 0.6vw;
-  font-weight: 600; 
-  color: #000;       
-  background: #fff;  
-  padding: 8px; 
+  font-weight: 600;
+  color: #000;
+  background: #fff;
+
+  padding: 4px 15px;
   align-items: center;
-  padding-left: 15px;
-  padding-right: 15px;
+  height: 6vh;
+  opacity: 1;
+  transition: height 0.4s  ease-in-out;
 }
 
-.period, .period-time {
+.period-info-close {
+  overflow: hidden;
+  width: 100%;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  gap: 5vw;
+  font-size: 0.6vw;
+  font-weight: 600;
+  color: #000;
+  background: #fff;
+  position: relative;
+
+  padding: 0px 0px;
+  align-items: center;
+  opacity: 0;
+  height: 1px;
+}
+
+.period-show, .period-time-show {
+  transition: height 0.6s  ease-in-out, opacity 0.4s ease-in-out;
   margin: 0;
   text-transform: uppercase;
+  height: 4vh;
+  opacity: 1;
 }
 
-.period-time{
+.period-time-show {
+  transition: height 0.6s  ease-in-out, opacity 0.4s ease-in-out;
   background: #999;
   padding: 3%;
+  height: 5vh;
+  opacity: 1;
+}
+
+.period-close, .period-time-close {
+  opacity: 0;
+  margin: 0;
+  text-transform: uppercase;
+  height: 1px;
+}
+
+.period-time-close{
+  opacity: 0;
+  background: #999;
+  padding: 3%;
+  height: 1px;
 }
 
 .red-info, .blue-info {
   width: 17vw;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   padding-top: 20px;
   flex-shrink: 0;
 }
 
-.red{
+.red {
   width: 17vw;
-  background: #722; 
+  background: #722;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .red-info {
   background: #c22;
+  width: 22vw;
   flex-direction: row;
 }
 
-.blue{
+.blue {
   width: 17vw;
   background: #227;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .blue-info {
   background: #22c;
-  flex-direction: row-reverse; 
+  width: 22vw;
+  flex-direction: row-reverse;
 }
 
 .red-name, .blue-name {
@@ -158,58 +209,56 @@ body, html {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  padding: 0 10px;
+  padding: 4px 10px;
   color: #e2e8f0;
   text-align: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
 
 .red-teams-box, .blue-teams-box {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  row-gap: 10px;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 6px 0;
+  align-items: center;
 }
 
 .red-teams, .blue-teams {
   margin: 0;
-  font-size: 18px;
   font-weight: 800;
   letter-spacing: 1px;
   color: #fff;
-  padding: 10px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
 }
 
-.red-teams{
+.red-teams {
   background: #c22;
 }
 
-.blue-teams{
+.blue-teams {
   background: #22c;
 }
 
-.red-score-box, .blue-score-box{
+.red-score-box, .blue-score-box {
   flex-grow: 1;
   align-self: stretch;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  position: relative;
-  min-width: 6vw;
-  width:fit-content;
-  padding: 10px;
+  min-width: 8vw;
+  padding: 0px;
 }
 
 .red-score, .blue-score {
-  display: flex;
-  justify-self: center;
   margin: 0;
-  font-weight: 900;
+  font-weight: 800;
   color: #fff;
-  font-size: auto;
 }
 
 .fuel-container {
@@ -233,33 +282,17 @@ body, html {
   background: #c22;
 }
 
-.red-balls, .blue-balls{
-  background: #fff;
-  height: 7vh;
-  align-self: stretch;
-  margin-right: 10px;
-}
-
-.red-balls{
-  filter:brightness(1.5);
-}
-
-.blue-balls{
-  filter:brightness(1.5);
-}
-
 .blue-fuel {
   background: #22c;
 }
 
-.red-active {
-  position: relative;
-  height: 6vh;
-  width: auto;
-  animation: pulseGlow 0.5s infinite ease-in-out;
+.red-balls, .blue-balls {
+  background: #fff;
+  height: 7vh;
+  margin-right: 10px;
 }
 
-.blue-active {
+.red-active, .blue-active {
   position: relative;
   height: 6vh;
   width: auto;
@@ -267,6 +300,54 @@ body, html {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { filter: brightness(0.5);}
+  0%, 100% { filter: brightness(0.5); }
   50% { filter: brightness(0.8); }
+}
+
+.team-name-tag {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #e2e8f0;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+  margin-top: 2px;
+}
+
+.red-rp-badge, .blue-rp-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #000;
+  background: #ffde00;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.marquee-vertical {
+    animation: scrollUp linear infinite;
+}
+
+@keyframes scrollUp {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        
+        transform: translateY(calc(-50% - 3px)); 
+    }
 }

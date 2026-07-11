@@ -58,6 +58,39 @@ function MatchSchedule(){
     }
   }
 
+  const exportScheduleCSV = () => {
+  const headers = [
+    "Match Number",
+    "Red Team 1",
+    "Red Team 2",
+    "Red Team 3",
+    "Blue Team 1",
+    "Blue Team 2",
+    "Blue Team 3"
+  ];
+
+  const rows = teamNames.map(match => [
+    match.number,
+    ...match.redAllianceNum,
+    ...match.blueAllianceNum
+  ]);
+
+  const csv = [
+    headers.join(","),
+    ...rows.map(row => row.join(","))
+  ].join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "matchSchedule.csv";
+  link.click();
+
+  URL.revokeObjectURL(url);
+};
+
   const getSchedule = async () => {
     //const tempMatches : Match[] = [];
     const tempMatches = await window.myAPI.getMatchSchedule();
@@ -158,6 +191,37 @@ function MatchSchedule(){
               )
               }
           </div>
+            <button
+              onClick={exportScheduleCSV}
+              disabled={teamNames.length === 0}
+              style={{
+                backgroundColor: "#555565",
+                padding: "10px 30px",
+                minWidth: "200px",
+                borderRadius: "40px",
+                border: "none",
+                outlineStyle: "solid",
+                outlineColor: "#353545",
+                outlineWidth: "4px",
+                marginBottom: "3%",
+                marginLeft: "15px",
+                fontSize: "100%",
+                cursor: teamNames.length === 0 ? "not-allowed" : "pointer",
+                opacity: teamNames.length === 0 ? 0.5 : 1,
+              }}
+              onMouseEnter={(e) => {
+                if (teamNames.length > 0) {
+                  e.currentTarget.style.backgroundColor = "#454555";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (teamNames.length > 0) {
+                  e.currentTarget.style.backgroundColor = "#555565";
+                }
+              }}
+            >
+              Export CSV
+            </button>
             <button className="new-gen" onClick={toggleNewOpen}>Generate New Match Schedule</button>
             {newOpen && (
               <div onClick={toggleNewOpen} className="popUp">
