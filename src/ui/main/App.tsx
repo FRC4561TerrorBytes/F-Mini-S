@@ -13,7 +13,6 @@ type Screen = 'menu' | 'teams' | 'matchSchedule' | 'matchResults' | 'match';
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('menu');
   const [isOpen, setIsOpen] = useState(false);
-
   
   const screens = {
     menu: <Menu />,
@@ -34,6 +33,7 @@ function App() {
   // const loadRanksWindow = async () => {
   //   await window.myAPI.loadRanksWindow();
   // }
+
 
   return (
     <div style={{ display: 'flex' }}>

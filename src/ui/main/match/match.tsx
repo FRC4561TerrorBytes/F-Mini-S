@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import './match.css';
+import { storageBox } from "../../globalStorage";
 
 type DoubleElim = {
   match1 : ElimMatch, match2 : ElimMatch, match3 : ElimMatch, match4 : ElimMatch,
@@ -233,7 +234,6 @@ const playSound = (sound: HTMLAudioElement) => {
   });
 };
 
-const storageBox = new GlobalStorageBox();
 
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>('');
@@ -320,25 +320,25 @@ useEffect(() => {
     lastTime.current = 139;
   }
 
-  // if(periodRed(matchInfo?.period)){
-  //     if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
-  //       sendDataToHardware('red', 'CMD:LED:PULSE_RED')
-  //     } else {
-  //       sendDataToHardware('red', 'CMD:LED:RED')
-  //     }
-  // } else {
-  //   sendDataToHardware('red', 'CMD:LED:OFF')
-  // }
+  if(periodRed(matchInfo?.period)){
+      if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
+        sendDataToHardware('red', 'CMD:LED:PULSE_RED')
+      } else {
+        sendDataToHardware('red', 'CMD:LED:RED')
+      }
+  } else {
+    sendDataToHardware('red', 'CMD:LED:OFF')
+  }
 
-  // if(periodBlue(matchInfo?.period)){
-  //     if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
-  //       sendDataToHardware('blue', 'CMD:LED:PULSE_BLUE')
-  //     } else {
-  //       sendDataToHardware('blue', 'CMD:LED:BLUE')
-  //     }
-  // } else {
-  //   sendDataToHardware('blue', 'CMD:LED:OFF')
-  // }
+  if(periodBlue(matchInfo?.period)){
+      if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
+        sendDataToHardware('blue', 'CMD:LED:PULSE_BLUE')
+      } else {
+        sendDataToHardware('blue', 'CMD:LED:BLUE')
+      }
+  } else {
+    sendDataToHardware('blue', 'CMD:LED:OFF')
+  }
 
   if (matchInfo.period != lastPeriod.current) {
     if(matchInfo.matchTime <= 130)
@@ -495,7 +495,9 @@ useEffect(() => {
       storageBox.set('redPort', targetPort);
       await targetPort.open({ baudRate: 115200 });
       setIsSerialConnected(true);
-      console.log('im connecting bruh -red hub');
+      console.log(targetPort);
+      console.log(storageBox.get('redPort'));
+      console.log(storageBox);
 
       const decoder = new TextDecoder();
       const reader = targetPort.readable.getReader();
@@ -633,6 +635,7 @@ useEffect(() => {
 
   const sendDataToHardware = async (targetHub: 'red' | 'blue', message: string) => {
     const port = storageBox.get(`${targetHub}Port`);
+
     if (!port) {
       console.warn(`Cannot send data: ${targetHub} Hub is not connected.`);
       return;
