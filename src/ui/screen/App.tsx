@@ -1,6 +1,8 @@
 import './App.css'
 import { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
+import type MatchResults from '../main/matchResults/matchResults';
+import { storageBox } from '../globalStorage';
 
 type matchDisplay = {
     redName: string,
@@ -98,6 +100,7 @@ type TeamRank = {
 function App() {
     const [info, setInfo] = useState<matchDisplay>();
     const [matchInfo, setMatchInfo] = useState<matchInfo>();
+    const [frozenMatchInfo, setFrozenMatchInfo] = useState<matchInfo>();
     const [camId, setCamId] = useState<string>("");
     const [mirror, setMirror] = useState<boolean>(false);
     const [colorMirror, setColorMirror] = useState<boolean>(false);
@@ -107,8 +110,29 @@ function App() {
     const [dis, setDis] = useState(0);
     const [rankings, setRankings] = useState<TeamRank[]>([]);
     const [historicalResults, setHistoricalResults] = useState<matchResultFile[]>([]);
+    const [videoPlaying, setVideoPlaying] = useState<boolean>(false);
 
     const webcamRef = useRef<Webcam | null>(null);
+    const disRef = useRef(dis);
+
+    const redWinVideoSrc = '../../../images/red-win.mp4';
+    const blueWinVideoSrc = '../../../images/blue-win.mp4';
+    const tieVideoSrc = '../../../images/tie.mp4';
+
+    const sounds = {
+  MatchResult: new Audio('../../../../../images/results-video.mp3'),
+};
+
+const playSound = (sound: HTMLAudioElement) => {
+  sound.currentTime = 0;
+  sound.play().catch(err => {
+    console.log("Sound blocked:", err);
+  });
+};
+
+    useEffect(() => {
+        disRef.current = dis;
+    }, [dis]);
 
     useEffect(() => {
 
@@ -118,6 +142,22 @@ function App() {
 
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (dis === 1) {
+            setVideoPlaying(true);
+            if(!(storageBox.get('result-sound') ?? false)){
+                playSound(sounds.MatchResult);
+                storageBox.set('result-sound', true);
+            }
+        }
+
+        if(dis != 1){
+            storageBox.set('result-sound', false);
+            
+        }
+
+    }, [dis]);
 
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -158,7 +198,14 @@ function App() {
 
     useEffect(() => {
         const mI = window.myAPI.onMatchInfo((data: matchInfo) => {
-            setMatchInfo(data);
+            
+
+             setMatchInfo(data);
+
+             if (disRef.current !== 1) {
+                 setFrozenMatchInfo(data);
+             }
+
             const matchNum = data.matchNum;
 
             const scheduleEntry = teamNames[matchNum - 1];
@@ -181,6 +228,7 @@ function App() {
                     blueTeams: data.blue.alliance,
                 });
             }
+            
         });
         return () => mI();
     }, [teamNames]);
@@ -467,22 +515,37 @@ function App() {
     }
 
     else if (dis === 1) {
-        const redTotal = matchInfo?.red?.points ?? 0;
-        const blueTotal = matchInfo?.blue?.points ?? 0;
+
+        if (videoPlaying) {
+            const winnerForVideo: 'red' | 'blue' | 'tie' = (frozenMatchInfo?.blue?.points ?? 0) == (frozenMatchInfo?.red?.points ?? 0) ? 'tie' : ((frozenMatchInfo?.blue?.points ?? 0) > (frozenMatchInfo?.red?.points ?? 0) ? 'blue' : 'red');
+            const resultVideoSrc = winnerForVideo === 'tie' ? tieVideoSrc : (winnerForVideo === 'red' ? redWinVideoSrc : blueWinVideoSrc);
+
+            return (
+                <video
+                    src={resultVideoSrc}
+                    autoPlay
+                    onEnded={() => setVideoPlaying(false)}
+                    style={{ width: '100vw', height: '100vh', objectFit: 'cover', background: '#000' }}
+                />
+            );
+        }
+
+        const redTotal = frozenMatchInfo?.red?.points ?? 0;
+        const blueTotal = frozenMatchInfo?.blue?.points ?? 0;
 
         let winner: 'red' | 'blue' | 'tie' = 'tie';
         if (redTotal > blueTotal) winner = 'red';
         else if (blueTotal > redTotal) winner = 'blue';
 
-        const redRP = matchInfo?.red?.rp ?? 0;
-        const blueRP = matchInfo?.blue?.rp ?? 0;
+        const redRP = frozenMatchInfo?.red?.rp ?? 0;
+        const blueRP = frozenMatchInfo?.blue?.rp ?? 0;
 
         return (
             <div style={{ width: '100vw', height: '100vh', background: 'radial-gradient(circle at center, #1a1a1a 0%, #000 100%)', display: 'flex', flexDirection: 'column', padding: '0', boxSizing: 'border-box', overflow: 'hidden' }}>
                 <div style={{ width: '100vw', background: '#222', borderBottom: '6px solid #ffde00', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '15px 0 10px 0', boxShadow: '0 8px 24px rgba(0,0,0,0.6)' }}>
                     <h1 style={{ margin: '0', fontSize: '18px', textTransform: 'uppercase', letterSpacing: '6px', fontWeight: '900', color: '#ffde00', textShadow: '2px 2px 0px #000' }}>MINI FRC - REBUILT</h1>
                     <h1 style={{ margin: '5px 0 0 0', fontSize: '28px', textTransform: 'uppercase', letterSpacing: '2px', fontWeight: '900', color: '#fff' }}>
-                        {matchInfo?.matchType ?? 'qualifications'} {matchInfo?.matchNum ?? -1} - RESULTS
+                        {frozenMatchInfo?.matchType ?? 'qualifications'} {frozenMatchInfo?.matchNum ?? -1} - RESULTS
                     </h1>
                 </div>
 
@@ -492,7 +555,7 @@ function App() {
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', background: '#722', padding: '15px', borderRadius: '16px', border: '4px solid #000' }}>
                                 {[0, 1, 2].map(i => (
                                     <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff', textShadow: '3px 3px 0px #000' }}>{matchInfo?.red?.alliance[i] ?? -1}</div>
+                                        <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff', textShadow: '3px 3px 0px #000' }}>{frozenMatchInfo?.red?.alliance[i] ?? -1}</div>
                                         {teamLabel(info?.redTeamNames, i) && (
                                             <div style={{ fontSize: '11px', fontWeight: 700, color: '#ffb3b3', textTransform: 'uppercase' }}>{teamLabel(info?.redTeamNames, i)}</div>
                                         )}
@@ -517,13 +580,13 @@ function App() {
 
                         <div style={{ display: 'flex', flexDirection: 'column', flex: '1', justifyContent: 'center' }}>
                             {[
-                                { label: 'Auto Fuel Scored', r: matchInfo?.red?.autoFuelScored, b: matchInfo?.blue?.autoFuelScored },
-                                { label: 'Teleop Fuel Scored', r: matchInfo?.red?.fuelScored, b: matchInfo?.blue?.fuelScored },
-                                { label: 'Auto Climbs', r: matchInfo?.red?.autoClimbs, b: matchInfo?.blue?.autoClimbs },
-                                { label: 'Endgame Climbs', r: `L1: ${matchInfo?.red?.endClimbsL1 ?? 0} / L2: ${matchInfo?.red?.endClimbsL2 ?? 0}`, b: `L1: ${matchInfo?.blue?.endClimbsL1 ?? 0} / L2: ${matchInfo?.blue?.endClimbsL2 ?? 0}` },
-                                { label: 'Endgame Parks', r: matchInfo?.red?.endPark, b: matchInfo?.blue?.endPark },
-                                { label: 'Climb Points', r: `${(matchInfo?.red?.endClimbsL1 ?? 0) * 10 + (matchInfo?.red?.endClimbsL2 ?? 0) * 30 + (matchInfo?.red?.autoClimbs ?? 0) * 15 + (matchInfo?.red?.endPark ?? 0) * 5}`, b: `${(matchInfo?.blue?.endClimbsL1 ?? 0) * 10 + (matchInfo?.blue?.endClimbsL2 ?? 0) * 30 + (matchInfo?.blue?.autoClimbs ?? 0) * 15 + (matchInfo?.blue?.endPark ?? 0) * 5}`},
-                                { label: 'Foul Points', r: `${(matchInfo?.blue?.fouls ?? 0) * 5 + (matchInfo?.blue?.tFouls ?? 0) * 15}`, b: `${(matchInfo?.red?.fouls ?? 0) * 5 + (matchInfo?.red?.tFouls ?? 0) * 15}` }
+                                { label: 'Auto Fuel Scored', r: frozenMatchInfo?.red?.autoFuelScored, b: frozenMatchInfo?.blue?.autoFuelScored },
+                                { label: 'Teleop Fuel Scored', r: frozenMatchInfo?.red?.fuelScored, b: frozenMatchInfo?.blue?.fuelScored },
+                                { label: 'Auto Climbs', r: frozenMatchInfo?.red?.autoClimbs, b: frozenMatchInfo?.blue?.autoClimbs },
+                                { label: 'Endgame Climbs', r: `L1: ${frozenMatchInfo?.red?.endClimbsL1 ?? 0} / L2: ${frozenMatchInfo?.red?.endClimbsL2 ?? 0}`, b: `L1: ${frozenMatchInfo?.blue?.endClimbsL1 ?? 0} / L2: ${frozenMatchInfo?.blue?.endClimbsL2 ?? 0}` },
+                                { label: 'Endgame Parks', r: frozenMatchInfo?.red?.endPark, b: frozenMatchInfo?.blue?.endPark },
+                                { label: 'Climb Points', r: `${(frozenMatchInfo?.red?.endClimbsL1 ?? 0) * 10 + (frozenMatchInfo?.red?.endClimbsL2 ?? 0) * 30 + (frozenMatchInfo?.red?.autoClimbs ?? 0) * 15 + (frozenMatchInfo?.red?.endPark ?? 0) * 5}`, b: `${(frozenMatchInfo?.blue?.endClimbsL1 ?? 0) * 10 + (frozenMatchInfo?.blue?.endClimbsL2 ?? 0) * 30 + (frozenMatchInfo?.blue?.autoClimbs ?? 0) * 15 + (frozenMatchInfo?.blue?.endPark ?? 0) * 5}`},
+                                { label: 'Foul Points', r: `${(frozenMatchInfo?.blue?.fouls ?? 0) * 5 + (frozenMatchInfo?.blue?.tFouls ?? 0) * 15}`, b: `${(frozenMatchInfo?.red?.fouls ?? 0) * 5 + (frozenMatchInfo?.red?.tFouls ?? 0) * 15}` }
                             ].map((row, i) => (
                                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 25px', flex: '1', borderBottom: i === 5 ? 'none' : '2px solid #333', background: i % 2 === 0 ? '#1a1a1a' : '#222' }}>
                                     <span style={{ width: '25%', textAlign: 'left', fontWeight: '900', fontSize: '20px', color: '#ff453a', textShadow: '1px 1px 0px #000' }}>{row.r}</span>
@@ -539,7 +602,7 @@ function App() {
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', background: '#227', padding: '15px', borderRadius: '16px', border: '4px solid #000' }}>
                                 {[0, 1, 2].map(i => (
                                     <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff', textShadow: '3px 3px 0px #000' }}>{matchInfo?.blue?.alliance[i] ?? -1}</div>
+                                        <div style={{ fontSize: '32px', fontWeight: '900', color: '#fff', textShadow: '3px 3px 0px #000' }}>{frozenMatchInfo?.blue?.alliance[i] ?? -1}</div>
                                         {teamLabel(info?.blueTeamNames, i) && (
                                             <div style={{ fontSize: '11px', fontWeight: 700, color: '#b3d4ff', textTransform: 'uppercase' }}>{teamLabel(info?.blueTeamNames, i)}</div>
                                         )}

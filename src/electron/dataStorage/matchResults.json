@@ -1,1 +1,65 @@
-[]
+[
+  {
+    "matchNumber": 1,
+    "matchType": "playoffs",
+    "time": [
+      {
+        "day": 14
+      },
+      {
+        "month": 7
+      },
+      {
+        "year": 2026
+      },
+      {
+        "hour": 12
+      },
+      {
+        "minute": 22
+      }
+    ],
+    "alliance": [
+      {
+        "color": "red",
+        "teams": [
+          1,
+          2,
+          3
+        ],
+        "points": 11,
+        "fuelScored": 11,
+        "autoClimbs": 0,
+        "endClimbsL1": 0,
+        "endClimbsL2": 0,
+        "endPark": 0,
+        "fouls": 0,
+        "TechFouls": 0,
+        "energizedRP": false,
+        "superchargedRP": false,
+        "traversalRP": false,
+        "win": true
+      },
+      {
+        "color": "blue",
+        "teams": [
+          22,
+          23,
+          24
+        ],
+        "points": 0,
+        "fuelScored": 0,
+        "autoClimbs": 0,
+        "endClimbsL1": 0,
+        "endClimbsL2": 0,
+        "endPark": 0,
+        "fouls": 0,
+        "TechFouls": 0,
+        "energizedRP": false,
+        "superchargedRP": false,
+        "traversalRP": false,
+        "win": false
+      }
+    ]
+  }
+]

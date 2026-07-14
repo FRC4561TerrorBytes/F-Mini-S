@@ -312,6 +312,9 @@ const playSound = (sound: HTMLAudioElement) => {
         return num;
     }
 
+    const lastRedColor = useRef<'pulse-red' | 'red' | 'off' | 'purple'>('off');
+    const lastBlueColor = useRef<'pulse-blue' | 'blue' | 'off' | 'purple'>('off');
+
 useEffect(() => {
   if (!matchInfo) return;
 
@@ -320,25 +323,56 @@ useEffect(() => {
     lastTime.current = 139;
   }
 
+  if(matchInfo.matchTime === 0){
+    if(lastRedColor.current != 'purple'){
+        sendDataToHardware('red', 'CMD:LED:PURPLE')
+        lastRedColor.current = 'purple'
+      }
+    if(lastBlueColor.current != 'purple'){
+        sendDataToHardware('blue', 'CMD:LED:PURPLE')
+        lastBlueColor.current = 'purple'
+      }
+  }
+  else{
   if(periodRed(matchInfo?.period)){
       if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
+        if(lastRedColor.current != 'pulse-red'){
         sendDataToHardware('red', 'CMD:LED:PULSE_RED')
+        lastRedColor.current = 'pulse-red'
+        }
       } else {
+        if(lastRedColor.current != 'red'){
         sendDataToHardware('red', 'CMD:LED:RED')
+        lastRedColor.current = 'red'
+        }
       }
   } else {
+    if(lastRedColor.current != 'off'){
     sendDataToHardware('red', 'CMD:LED:OFF')
+    lastRedColor.current = 'off'
+    }
   }
 
   if(periodBlue(matchInfo?.period)){
       if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
+        if(lastBlueColor.current != 'pulse-blue'){
         sendDataToHardware('blue', 'CMD:LED:PULSE_BLUE')
+        lastBlueColor.current = 'pulse-blue'
+        }
       } else {
+        if(lastBlueColor.current != 'blue'){
         sendDataToHardware('blue', 'CMD:LED:BLUE')
+        lastBlueColor.current = 'blue'
+        }
       }
   } else {
+    if(lastBlueColor.current != 'off'){
     sendDataToHardware('blue', 'CMD:LED:OFF')
+    lastBlueColor.current = 'off'
+    }
+    
   }
+}
 
   if (matchInfo.period != lastPeriod.current) {
     if(matchInfo.matchTime <= 130)
@@ -428,6 +462,7 @@ useEffect(() => {
 
   useEffect(() => {
     const mI = window.myAPI.onMatchInfo((data: MatchInfoType) => {
+      
       setMatchInfo(data);
       const matchNum = data.matchNum;
 
