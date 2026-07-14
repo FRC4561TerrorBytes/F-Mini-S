@@ -318,6 +318,7 @@ const playSound = (sound: HTMLAudioElement) => {
 useEffect(() => {
   if (!matchInfo) return;
 
+
   if (matchInfo.matchTime === 139 && lastTime.current != matchInfo.matchTime) {
     playSound(sounds.teleStart);
     lastTime.current = 139;
@@ -776,6 +777,8 @@ useEffect(() => {
 
     if(matchInfo?.matchTime === 160)
       playSound(sounds.matchStart);
+      sendDataToHardware('red', "CMD:MOTOR:ON")
+      sendDataToHardware('blue', "CMD:MOTOR:ON")
   };
 
   const togglePauseMatch = () => {

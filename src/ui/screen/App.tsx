@@ -289,6 +289,9 @@ const playSound = (sound: HTMLAudioElement) => {
     };
 
     const cnvtTime = (num: number) => {
+        if(num <= 0)
+            return '0:00';
+        
         return Math.floor(num / 60) + ':' + (num % 60 < 10 ? '0' : '') + (num % 60);
     }
 
@@ -298,6 +301,7 @@ const playSound = (sound: HTMLAudioElement) => {
         if (num >= 80) return num - 80;
         if (num >= 55) return num - 55;
         if (num >= 30) return num - 30;
+        if(num <= 0) return 0;
         return num;
     }
 

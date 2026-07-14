@@ -23,3 +23,5 @@ dist-electron
 *.njsproj
 *.sln
 *.sw?
+src/electron/dataStorage/matchResults.json
+src/electron/dataStorage/teamRanks.json

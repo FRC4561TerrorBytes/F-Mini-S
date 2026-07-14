@@ -61,6 +61,7 @@ class Match {
     private timer: NodeJS.Timeout | null = null;
     private paused = true;
     public info: matchInfo;
+    public reTime: number = 0;
 
     constructor() {
         this.info = this.createDefaultMatchInfo(0, 'qualifications', [0,0,0], [0,0,0]);
@@ -100,7 +101,43 @@ class Match {
         return 6;
     }
 
+    public cnvtTimePeriodFuel(num: number) {
+        if (num >= 130) return 1;
+        if (num >= 130 -3 && num <= 130) return 1;
+        if (num >= 105) return 2;
+        if (num >= 105 -3 && num <= 105) return 1;
+        if (num >= 80) return 3;
+        if (num >= 80-3 && num <= 80) return 1;
+        if (num >= 55) return 4;
+        if (num >= 55-3 && num <= 55) return 1;
+        if (num >= 30) return 5;
+        if (num >= 30 -3 && num <= 55) return 1;
+        return 6;
+    }
+
+    public cnvtPeriodTime(num : number){
+        if (num >= 130) return num - 130;
+        if (num >= 105) return num - 105;
+        if (num >= 80) return num - 80;
+        if (num >= 55) return num - 55;
+        if (num >= 30) return num - 30;
+        return num;
+    }
+
+    public cnvtTimeInPeriod(num : number){
+        if (num >= 130) return 10;
+        if (num >= 105) return 25;
+        if (num >= 80) return 25;
+        if (num >= 55) return 25;
+        if (num >= 30) return 30;
+        return num;
+    }
+
     public fuel(alliance: 'red' | 'blue') {
+
+        if(this.info.matchTime <= -2){
+            return;
+        }
         if (this.info.matchTime >= 140) {
             this.info[alliance].fuelScored++;
             this.info[alliance].autoFuelScored++;
@@ -169,7 +206,7 @@ class Match {
 
         this.paused = false;
         this.timer = setInterval(() => {
-            if (this.info.matchTime > 0 && !this.paused) {
+            if (this.info.matchTime > -4 && !this.paused) {
                 this.info.matchTime--;
                 this.info.period = this.cnvtTimePeriod(this.info.matchTime);
             } else if (!this.paused) {
