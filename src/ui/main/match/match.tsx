@@ -322,9 +322,11 @@ useEffect(() => {
   if (matchInfo.matchTime === 139 && lastTime.current != matchInfo.matchTime) {
     playSound(sounds.teleStart);
     lastTime.current = 139;
+    sendDataToHardware('red', 'CMD:LED:RED')
+    sendDataToHardware('blue', 'CMD:LED:BLUE')
   }
 
-  if(matchInfo.matchTime === 0){
+  if(matchInfo.matchTime <= 0){
     if(lastRedColor.current != 'purple'){
         sendDataToHardware('red', 'CMD:LED:PURPLE')
         lastRedColor.current = 'purple'
@@ -770,15 +772,22 @@ useEffect(() => {
 
     await window.myAPI.createMatch(matchNum, type, redAlliance, blueAlliance);
     setApproveStatus('');
+    sendDataToHardware('red', 'CMD:LED:GREEN');
+    sendDataToHardware('blue', 'CMD:LED:GREEN');
   };
 
   const startMatch = async () => {
     await window.myAPI.startMatch();
 
-    if(matchInfo?.matchTime === 160)
+    if(matchInfo?.matchTime === 160){
       playSound(sounds.matchStart);
-      sendDataToHardware('red', "CMD:MOTOR:ON")
-      sendDataToHardware('blue', "CMD:MOTOR:ON")
+      sendDataToHardware('red', 'CMD:LED:RED');
+      sendDataToHardware('blue', 'CMD:LED:BLUE');
+    }
+    sendDataToHardware('red', "CMD:MOTOR:ON");
+    sendDataToHardware('blue', "CMD:MOTOR:ON");
+
+
   };
 
   const togglePauseMatch = () => {
