@@ -370,7 +370,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                                 <div key={i} className='blue-teams'>
                                                     <h1 style={{ margin: 0 }}>{matchInfo?.blue?.alliance[i] ?? -1}</h1>
                                                     {teamLabel(info?.blueTeamNames, i) && (
-                                                        <div className='team-name-tag'>{teamLabel(info?.blueTeamNames, i)}</div>
+                                                        <div className='team-name-tag'>{}</div>
                                                     )}
                                                 </div>
                                             ))}
@@ -398,7 +398,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                                 <div key={i} className='red-teams'>
                                                     <h1 style={{ margin: 0 }}>{matchInfo?.red?.alliance[i] ?? -1}</h1>
                                                     {teamLabel(info?.redTeamNames, i) && (
-                                                        <div className='team-name-tag'>{teamLabel(info?.redTeamNames, i)}</div>
+                                                        <div className='team-name-tag'>{}</div>
                                                     )}
                                                 </div>
                                             ))}
@@ -454,7 +454,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                                 <div key={i} className='red-teams'>
                                                     <h1 style={{ margin: 0 }}>{matchInfo?.red?.alliance[i] ?? -1}</h1>
                                                     {teamLabel(info?.redTeamNames, i) && (
-                                                        <div className='team-name-tag'>{teamLabel(info?.redTeamNames, i)}</div>
+                                                        <div className='team-name-tag'>{}</div>
                                                     )}
                                                 </div>
                                             ))}
@@ -484,7 +484,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                                 <div key={i} className='blue-teams'>
                                                     <h1 style={{ margin: 0 }}>{matchInfo?.blue?.alliance[i] ?? -1}</h1>
                                                     {teamLabel(info?.blueTeamNames, i) && (
-                                                        <div className='team-name-tag'>{teamLabel(info?.blueTeamNames, i)}</div>
+                                                        <div className='team-name-tag'>{}</div>
                                                     )}
                                                 </div>
                                             ))}

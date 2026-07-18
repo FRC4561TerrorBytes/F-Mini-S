@@ -1,72 +1,127 @@
 [
   {
-    "number": "83",
-    "name": "Pink Fluffy Unicorns",
-    "skill": "3"
-  },
-  {
     "number": "2",
-    "name": "Fast",
-    "skill": "5"
-  },
-  {
-    "number": "1",
-    "name": "one",
-    "skill": "2"
-  },
-  {
-    "number": "3",
-    "name": "threey",
+    "name": "FAST",
     "skill": "1"
   },
   {
-    "number": "4",
-    "name": "goats",
-    "skill": "4"
-  },
-  {
-    "number": "5",
-    "name": "greg",
-    "skill": "3"
-  },
-  {
-    "number": "6",
-    "name": "isnase",
-    "skill": "2"
-  },
-  {
-    "number": "7",
-    "name": "enag",
-    "skill": "4"
-  },
-  {
-    "number": "8",
-    "name": "york",
+    "number": "94",
+    "name": "Undone Brainfolds",
     "skill": "1"
   },
   {
-    "number": "9",
-    "name": "upper",
-    "skill": "2"
-  },
-  {
-    "number": "10",
-    "name": "tre",
+    "number": "40",
+    "name": "Midtown",
     "skill": "1"
   },
   {
-    "number": "11",
-    "name": "gaoisdhfoui",
-    "skill": "4"
+    "number": "140",
+    "name": "Badtown",
+    "skill": "1"
   },
   {
-    "number": "12",
-    "name": "isaji",
-    "skill": "2"
+    "number": "73",
+    "name": "Mildstang",
+    "skill": "1"
   },
   {
-    "number": "13",
-    "name": "gugee",
-    "skill": "3"
+    "number": "142",
+    "name": "Mostly Harmless",
+    "skill": "1"
+  },
+  {
+    "number": "122",
+    "name": "TOAST",
+    "skill": "1"
+  },
+  {
+    "number": "83",
+    "name": "The Pink Fluffy Unicorns",
+    "skill": "1"
+  },
+  {
+    "number": "93",
+    "name": "Taterbots",
+    "skill": "1"
+  },
+  {
+    "number": "49",
+    "name": "Squidgelets",
+    "skill": "1"
+  },
+  {
+    "number": "18",
+    "name": "RoboNOTs",
+    "skill": "1"
+  },
+  {
+    "number": "126",
+    "name": "Leastbots",
+    "skill": "1"
+  },
+  {
+    "number": "59",
+    "name": "50% Off Bots",
+    "skill": "1"
+  },
+  {
+    "number": "50",
+    "name": "Spark",
+    "skill": "1"
+  },
+  {
+    "number": "39",
+    "name": "Cobra In A Box",
+    "skill": "1"
+  },
+  {
+    "number": "127",
+    "name": "StarryBotz",
+    "skill": "1"
+  },
+  {
+    "number": "120",
+    "name": "The Beasts",
+    "skill": "1"
+  },
+  {
+    "number": "128",
+    "name": "The VectorVolts",
+    "skill": "1"
+  },
+  {
+    "number": "129",
+    "name": "The Aristotelian Eight",
+    "skill": "1"
+  },
+  {
+    "number": "109",
+    "name": "Smokey Circuits",
+    "skill": "1"
+  },
+  {
+    "number": "97",
+    "name": "Honse",
+    "skill": "1"
+  },
+  {
+    "number": "74",
+    "name": "Orange Opps",
+    "skill": "1"
+  },
+  {
+    "number": "131",
+    "name": "Little LoCo",
+    "skill": "1"
+  },
+  {
+    "number": "132",
+    "name": "LoCo Lemon",
+    "skill": "1"
+  },
+  {
+    "number": "99",
+    "name": "MuggShot",
+    "skill": "1"
   }
 ]
