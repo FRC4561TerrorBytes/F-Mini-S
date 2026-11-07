@@ -112,7 +112,7 @@ function MatchSchedule(){
     setTeamNames(tempTeamMatches);
   }
 
-  const getAndUpdateSchedule = async (matchesPerTeam : number, matchesTotal : number) => {
+  const getAndUpdateSchedule = async (matchesPerTeam : number) => {
     setJsonUpdated(true);
     await window.myAPI.updateMatchSchedule(matchesPerTeam);
     await getSchedule();
@@ -168,7 +168,7 @@ function MatchSchedule(){
 
   const handleGenerate = (()=> {
 
-    getAndUpdateSchedule(selected.matchesPerTeam, selected.matchesTotal);
+    getAndUpdateSchedule(selected.matchesPerTeam);
     toggleNewOpen();
   })
 

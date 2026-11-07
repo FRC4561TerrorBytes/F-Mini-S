@@ -70,16 +70,16 @@ export async function updateMatchSchedule(matchesPerTeam : number){
         await jsonToString('./schedules/' + teams.length + '_' + matchesPerTeam + '.json')
     );
 
-    const teamIndexMap = new Map<number, number>();
+    const teamNumberMap = new Map<number, number>();
 
     for (let i = 0; i < teams.length; i++) {
-        teamIndexMap.set(Number(teams[i].number), i);
+        teamNumberMap.set(i, Number(teams[i].number));
     }
 
     const mappedSchedule = matchSchedule.map((match: Match) => ({
         number: match.number,
-        redAlliance: match.redAlliance.map((teamNumber: number) => teamIndexMap.get(teamNumber) ?? teamNumber),
-        blueAlliance: match.blueAlliance.map((teamNumber: number) => teamIndexMap.get(teamNumber) ?? teamNumber)
+        redAlliance: match.redAlliance.map((teamIndex: number) => teamNumberMap.get(teamIndex) ?? teamIndex),
+        blueAlliance: match.blueAlliance.map((teamIndex: number) => teamNumberMap.get(teamIndex) ?? teamIndex)
     })) as MatchFile;
 
     safeWriteJSON(matchSchedulePath, mappedSchedule);
