@@ -99,6 +99,7 @@ export interface IElectronAPI {
     getTeamNumberList: () => Promise<number[]>;
     getTeamNameList: () => Promise<string[]>;
     getTeamSkillList: () => Promise<number[]>;
+    importTeamCSV: (csvString: string) => Promise<void>;
     updateTeamsJson: (teams : TeamInput[]) => void;
     getMatchOptions: (amt : number) => Promise<number[][]>;
     updateMatchSchedule: (matchesPerTeam : number) => Promise<Match[]>;
@@ -146,6 +147,7 @@ const api: IElectronAPI = {
     getTeamNameList: () => ipcRenderer.invoke("getTeamNameList"),
     getTeamNumberList: () => ipcRenderer.invoke("getTeamNumberList"),
     getTeamSkillList: () => ipcRenderer.invoke("getTeamSkillList"),
+    importTeamCSV: (csvString: string) => ipcRenderer.invoke('importTeamCSV', csvString),
     updateTeamsJson: (teams : TeamInput[]) => ipcRenderer.invoke('updateTeamsJson', teams),
     getMatchOptions: (amt : number) => ipcRenderer.invoke('getMatchOptions', amt),
     updateMatchSchedule: (matchesPerTeam : number) => ipcRenderer.invoke('updateMatchSchedule', matchesPerTeam),

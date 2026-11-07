@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './teams.css'
 
 type TeamInput = {
@@ -9,6 +9,7 @@ type TeamInput = {
 
 function Teams() {
   const [teams, setTeams] = useState<TeamInput[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [jsonUpdated, setJsonUpdated] = useState(false);
 
@@ -149,6 +150,16 @@ function Teams() {
   const addBlankTeam = () => {
     setTeams(prev => [...prev, { number: '', name: '', skill: '' }]);
   };
+
+  const importCsvTeams = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const csvText = await file.text();
+    await window.myAPI.importTeamCSV(csvText);
+    await updateTeams();
+    event.target.value = '';
+  };
   
   const removeTeam = (index: number, teamArr : TeamInput[]) => {
     teamArr = teamArr.filter((_, i) => i !== index);
@@ -216,7 +227,25 @@ function Teams() {
         </tbody>
       </table>
 
-      <button onClick={() => addBlankTeam()} className='team-add-btn'>Add Team</button>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', width: '595px' }}>
+          <button onClick={() => addBlankTeam()} className='team-add-btn'>Add Team</button>
+          <button
+            type="button"
+            className='team-add-btn'
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Import CSV
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv"
+            onChange={importCsvTeams}
+            style={{ display: 'none' }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

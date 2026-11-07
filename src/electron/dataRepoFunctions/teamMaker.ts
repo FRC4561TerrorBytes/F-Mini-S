@@ -9,6 +9,24 @@ type teamFile = {
         skill : number
     };
 
+export async function importTeamCSV(csvString : string){
+    const rows = csvString.split(/\r?\n/);
+
+    for (const row of rows) {
+        const trimmed = row.trim();
+        if (!trimmed) continue;
+
+        const columns = trimmed.split(',').map(value => value.trim());
+        const teamNumber = Number.parseInt(columns[0] ?? '', 10);
+        const teamName = columns.slice(1).join(',').trim();
+
+        if (!Number.isFinite(teamNumber) || teamNumber <= 0 || !teamName) {
+            continue;
+        }
+
+        await addTeam(teamNumber, teamName, 1);
+    }
+}
 /**
  * Adds a team to the teams.json
  * @param number - Teams Number
@@ -79,6 +97,7 @@ export async function addTeam( number : number, name : string, skill : number){
 export async function writeNewTeamJson(teams : teamFile[]){
     safeWriteJSON(teamsPath, teams);
 }
+
 
 /**
  * Updates a teams name in the team Json according to team number
