@@ -2,7 +2,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import path from 'path';
 import { isDev } from './util.js';
 import { getTeamName, getTeamNamesList, getTeamNumList, getTeamSkillList, writeNewTeamJson } from './dataRepoFunctions/teamMaker.js';
-import { getAndUpdateMatchSchedule, getMatchSchedule, matchOptions } from './dataRepoFunctions/matchMaker.js';
+import { getMatchSchedule, matchOptions, updateMatchSchedule } from './dataRepoFunctions/matchMaker.js';
 import { addRebuiltMatchResult, getMatchResult, getMatchResultFile, removeMatchResult } from './games/rebuilt/matchResultMaker.js';
 import { getRanks } from './dataRepoFunctions/rankingMaker.js';
 
@@ -393,7 +393,7 @@ app.on("ready", () => {
     ipcMain.handle("getTeamSkillList", () => getTeamSkillList());
     ipcMain.handle("updateTeamsJson", (_, teams) => writeNewTeamJson(teams));
     ipcMain.handle("getMatchOptions", (_, amt) => matchOptions(amt));
-    ipcMain.handle("getAndUpdateMatchSchedule", (_, matchesPerTeam, matchesTotal) => getAndUpdateMatchSchedule(matchesPerTeam, matchesTotal));
+    ipcMain.handle("updateMatchSchedule", (_, matchesPerTeam) => updateMatchSchedule(matchesPerTeam));
     ipcMain.handle("getMatchSchedule", () => getMatchSchedule());
 
     ipcMain.handle("getRanks", () => getRanks());

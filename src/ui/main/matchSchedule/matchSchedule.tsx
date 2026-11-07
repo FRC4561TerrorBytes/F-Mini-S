@@ -114,7 +114,7 @@ function MatchSchedule(){
 
   const getAndUpdateSchedule = async (matchesPerTeam : number, matchesTotal : number) => {
     setJsonUpdated(true);
-    await window.myAPI.getAndUpdateMatchSchedule(matchesPerTeam, matchesTotal);
+    await window.myAPI.updateMatchSchedule(matchesPerTeam);
     await getSchedule();
     setJsonUpdated(false);
   }
