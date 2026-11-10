@@ -99,9 +99,10 @@ export interface IElectronAPI {
     getTeamNumberList: () => Promise<number[]>;
     getTeamNameList: () => Promise<string[]>;
     getTeamSkillList: () => Promise<number[]>;
+    importTeamCSV: (csvString: string) => Promise<void>;
     updateTeamsJson: (teams : TeamInput[]) => void;
     getMatchOptions: (amt : number) => Promise<number[][]>;
-    getAndUpdateMatchSchedule: (matchesPerTeam : number, matchesTotal : number) => Promise<Match[]>;
+    updateMatchSchedule: (matchesPerTeam : number) => Promise<Match[]>;
     getMatchSchedule: () => Promise<Match[]>;
 
     approveMatch: () => Promise<boolean>;
@@ -146,9 +147,10 @@ const api: IElectronAPI = {
     getTeamNameList: () => ipcRenderer.invoke("getTeamNameList"),
     getTeamNumberList: () => ipcRenderer.invoke("getTeamNumberList"),
     getTeamSkillList: () => ipcRenderer.invoke("getTeamSkillList"),
+    importTeamCSV: (csvString: string) => ipcRenderer.invoke('importTeamCSV', csvString),
     updateTeamsJson: (teams : TeamInput[]) => ipcRenderer.invoke('updateTeamsJson', teams),
     getMatchOptions: (amt : number) => ipcRenderer.invoke('getMatchOptions', amt),
-    getAndUpdateMatchSchedule: (matchesPerTeam : number, matchesTotal : number) => ipcRenderer.invoke('getAndUpdateMatchSchedule', matchesPerTeam, matchesTotal),
+    updateMatchSchedule: (matchesPerTeam : number) => ipcRenderer.invoke('updateMatchSchedule', matchesPerTeam),
     getMatchSchedule: () => ipcRenderer.invoke('getMatchSchedule'),
 
     approveMatch: () => ipcRenderer.invoke('approveMatch'),

@@ -1,0 +1,184 @@
+[
+  {
+    "number": 1,
+    "redAlliance": [
+      4,
+      1,
+      5
+    ],
+    "blueAlliance": [
+      8,
+      7,
+      2
+    ]
+  },
+  {
+    "number": 2,
+    "redAlliance": [
+      3,
+      9,
+      8
+    ],
+    "blueAlliance": [
+      6,
+      2,
+      1
+    ]
+  },
+  {
+    "number": 3,
+    "redAlliance": [
+      4,
+      3,
+      9
+    ],
+    "blueAlliance": [
+      6,
+      7,
+      5
+    ]
+  },
+  {
+    "number": 4,
+    "redAlliance": [
+      6,
+      1,
+      9
+    ],
+    "blueAlliance": [
+      8,
+      2,
+      1
+    ]
+  },
+  {
+    "number": 5,
+    "redAlliance": [
+      1,
+      6,
+      2
+    ],
+    "blueAlliance": [
+      7,
+      4,
+      5
+    ]
+  },
+  {
+    "number": 6,
+    "redAlliance": [
+      3,
+      1,
+      7
+    ],
+    "blueAlliance": [
+      5,
+      8,
+      9
+    ]
+  },
+  {
+    "number": 7,
+    "redAlliance": [
+      7,
+      4,
+      6
+    ],
+    "blueAlliance": [
+      1,
+      8,
+      3
+    ]
+  },
+  {
+    "number": 8,
+    "redAlliance": [
+      2,
+      5,
+      3
+    ],
+    "blueAlliance": [
+      9,
+      4,
+      1
+    ]
+  },
+  {
+    "number": 9,
+    "redAlliance": [
+      7,
+      5,
+      8
+    ],
+    "blueAlliance": [
+      9,
+      6,
+      2
+    ]
+  },
+  {
+    "number": 10,
+    "redAlliance": [
+      8,
+      2,
+      4
+    ],
+    "blueAlliance": [
+      9,
+      7,
+      3
+    ]
+  },
+  {
+    "number": 11,
+    "redAlliance": [
+      1,
+      5,
+      9
+    ],
+    "blueAlliance": [
+      6,
+      8,
+      4
+    ]
+  },
+  {
+    "number": 12,
+    "redAlliance": [
+      2,
+      1,
+      7
+    ],
+    "blueAlliance": [
+      3,
+      5,
+      6
+    ]
+  },
+  {
+    "number": 13,
+    "redAlliance": [
+      2,
+      9,
+      7
+    ],
+    "blueAlliance": [
+      4,
+      6,
+      1
+    ]
+  },
+  {
+    "number": 14,
+    "redAlliance": [
+      8,
+      3,
+      6
+    ],
+    "blueAlliance": [
+      5,
+      2,
+      4
+    ]
+  }
+]

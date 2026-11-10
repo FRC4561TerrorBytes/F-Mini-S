@@ -1,0 +1,93 @@
+[
+  {
+    "number": 1,
+    "redAlliance": [
+      15,
+      17,
+      32
+    ],
+    "blueAlliance": [
+      24,
+      12,
+      9
+    ]
+  },
+  {
+    "number": 2,
+    "redAlliance": [
+      1,
+      13,
+      22
+    ],
+    "blueAlliance": [
+      26,
+      19,
+      37
+    ]
+  },
+  {
+    "number": 3,
+    "redAlliance": [
+      40,
+      38,
+      29
+    ],
+    "blueAlliance": [
+      33,
+      35,
+      36
+    ]
+  },
+  {
+    "number": 4,
+    "redAlliance": [
+      30,
+      5,
+      21
+    ],
+    "blueAlliance": [
+      10,
+      7,
+      39
+    ]
+  },
+  {
+    "number": 5,
+    "redAlliance": [
+      8,
+      3,
+      2
+    ],
+    "blueAlliance": [
+      23,
+      20,
+      34
+    ]
+  },
+  {
+    "number": 6,
+    "redAlliance": [
+      18,
+      16,
+      28
+    ],
+    "blueAlliance": [
+      11,
+      42,
+      4
+    ]
+  },
+  {
+    "number": 7,
+    "redAlliance": [
+      25,
+      41,
+      14
+    ],
+    "blueAlliance": [
+      27,
+      6,
+      31
+    ]
+  }
+]

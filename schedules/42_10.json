@@ -1,0 +1,912 @@
+[
+  {
+    "number": 1,
+    "redAlliance": [
+      15,
+      37,
+      9
+    ],
+    "blueAlliance": [
+      41,
+      24,
+      19
+    ]
+  },
+  {
+    "number": 2,
+    "redAlliance": [
+      13,
+      10,
+      7
+    ],
+    "blueAlliance": [
+      16,
+      18,
+      23
+    ]
+  },
+  {
+    "number": 3,
+    "redAlliance": [
+      2,
+      36,
+      32
+    ],
+    "blueAlliance": [
+      4,
+      11,
+      1
+    ]
+  },
+  {
+    "number": 4,
+    "redAlliance": [
+      8,
+      6,
+      35
+    ],
+    "blueAlliance": [
+      38,
+      20,
+      29
+    ]
+  },
+  {
+    "number": 5,
+    "redAlliance": [
+      21,
+      33,
+      34
+    ],
+    "blueAlliance": [
+      14,
+      25,
+      28
+    ]
+  },
+  {
+    "number": 6,
+    "redAlliance": [
+      40,
+      22,
+      42
+    ],
+    "blueAlliance": [
+      17,
+      26,
+      27
+    ]
+  },
+  {
+    "number": 7,
+    "redAlliance": [
+      39,
+      31,
+      3
+    ],
+    "blueAlliance": [
+      30,
+      12,
+      5
+    ]
+  },
+  {
+    "number": 8,
+    "redAlliance": [
+      29,
+      35,
+      25
+    ],
+    "blueAlliance": [
+      1,
+      9,
+      28
+    ]
+  },
+  {
+    "number": 9,
+    "redAlliance": [
+      21,
+      41,
+      7
+    ],
+    "blueAlliance": [
+      32,
+      24,
+      38
+    ]
+  },
+  {
+    "number": 10,
+    "redAlliance": [
+      23,
+      8,
+      19
+    ],
+    "blueAlliance": [
+      27,
+      31,
+      34
+    ]
+  },
+  {
+    "number": 11,
+    "redAlliance": [
+      12,
+      39,
+      11
+    ],
+    "blueAlliance": [
+      6,
+      10,
+      15
+    ]
+  },
+  {
+    "number": 12,
+    "redAlliance": [
+      22,
+      30,
+      26
+    ],
+    "blueAlliance": [
+      13,
+      4,
+      33
+    ]
+  },
+  {
+    "number": 13,
+    "redAlliance": [
+      40,
+      14,
+      3
+    ],
+    "blueAlliance": [
+      18,
+      2,
+      20
+    ]
+  },
+  {
+    "number": 14,
+    "redAlliance": [
+      37,
+      36,
+      5
+    ],
+    "blueAlliance": [
+      17,
+      42,
+      16
+    ]
+  },
+  {
+    "number": 15,
+    "redAlliance": [
+      28,
+      31,
+      8
+    ],
+    "blueAlliance": [
+      7,
+      22,
+      24
+    ]
+  },
+  {
+    "number": 16,
+    "redAlliance": [
+      29,
+      11,
+      21
+    ],
+    "blueAlliance": [
+      41,
+      13,
+      2
+    ]
+  },
+  {
+    "number": 17,
+    "redAlliance": [
+      6,
+      18,
+      30
+    ],
+    "blueAlliance": [
+      36,
+      27,
+      35
+    ]
+  },
+  {
+    "number": 18,
+    "redAlliance": [
+      23,
+      34,
+      26
+    ],
+    "blueAlliance": [
+      25,
+      5,
+      3
+    ]
+  },
+  {
+    "number": 19,
+    "redAlliance": [
+      4,
+      14,
+      39
+    ],
+    "blueAlliance": [
+      40,
+      10,
+      37
+    ]
+  },
+  {
+    "number": 20,
+    "redAlliance": [
+      42,
+      9,
+      20
+    ],
+    "blueAlliance": [
+      15,
+      1,
+      33
+    ]
+  },
+  {
+    "number": 21,
+    "redAlliance": [
+      38,
+      12,
+      17
+    ],
+    "blueAlliance": [
+      32,
+      19,
+      16
+    ]
+  },
+  {
+    "number": 22,
+    "redAlliance": [
+      2,
+      27,
+      37
+    ],
+    "blueAlliance": [
+      34,
+      29,
+      7
+    ]
+  },
+  {
+    "number": 23,
+    "redAlliance": [
+      15,
+      30,
+      4
+    ],
+    "blueAlliance": [
+      25,
+      8,
+      21
+    ]
+  },
+  {
+    "number": 24,
+    "redAlliance": [
+      19,
+      1,
+      14
+    ],
+    "blueAlliance": [
+      22,
+      6,
+      5
+    ]
+  },
+  {
+    "number": 25,
+    "redAlliance": [
+      36,
+      24,
+      39
+    ],
+    "blueAlliance": [
+      41,
+      23,
+      33
+    ]
+  },
+  {
+    "number": 26,
+    "redAlliance": [
+      18,
+      28,
+      10
+    ],
+    "blueAlliance": [
+      38,
+      42,
+      3
+    ]
+  },
+  {
+    "number": 27,
+    "redAlliance": [
+      32,
+      31,
+      13
+    ],
+    "blueAlliance": [
+      35,
+      40,
+      20
+    ]
+  },
+  {
+    "number": 28,
+    "redAlliance": [
+      9,
+      17,
+      11
+    ],
+    "blueAlliance": [
+      26,
+      12,
+      16
+    ]
+  },
+  {
+    "number": 29,
+    "redAlliance": [
+      39,
+      1,
+      37
+    ],
+    "blueAlliance": [
+      38,
+      27,
+      21
+    ]
+  },
+  {
+    "number": 30,
+    "redAlliance": [
+      20,
+      33,
+      28
+    ],
+    "blueAlliance": [
+      41,
+      31,
+      5
+    ]
+  },
+  {
+    "number": 31,
+    "redAlliance": [
+      32,
+      4,
+      40
+    ],
+    "blueAlliance": [
+      9,
+      6,
+      34
+    ]
+  },
+  {
+    "number": 32,
+    "redAlliance": [
+      11,
+      25,
+      19
+    ],
+    "blueAlliance": [
+      18,
+      8,
+      42
+    ]
+  },
+  {
+    "number": 33,
+    "redAlliance": [
+      7,
+      15,
+      12
+    ],
+    "blueAlliance": [
+      23,
+      22,
+      35
+    ]
+  },
+  {
+    "number": 34,
+    "redAlliance": [
+      14,
+      2,
+      17
+    ],
+    "blueAlliance": [
+      13,
+      24,
+      30
+    ]
+  },
+  {
+    "number": 35,
+    "redAlliance": [
+      16,
+      10,
+      3
+    ],
+    "blueAlliance": [
+      26,
+      29,
+      36
+    ]
+  },
+  {
+    "number": 36,
+    "redAlliance": [
+      28,
+      7,
+      23
+    ],
+    "blueAlliance": [
+      6,
+      11,
+      40
+    ]
+  },
+  {
+    "number": 37,
+    "redAlliance": [
+      33,
+      8,
+      5
+    ],
+    "blueAlliance": [
+      12,
+      21,
+      2
+    ]
+  },
+  {
+    "number": 38,
+    "redAlliance": [
+      36,
+      25,
+      18
+    ],
+    "blueAlliance": [
+      17,
+      37,
+      29
+    ]
+  },
+  {
+    "number": 39,
+    "redAlliance": [
+      34,
+      42,
+      19
+    ],
+    "blueAlliance": [
+      39,
+      13,
+      35
+    ]
+  },
+  {
+    "number": 40,
+    "redAlliance": [
+      41,
+      30,
+      3
+    ],
+    "blueAlliance": [
+      9,
+      22,
+      32
+    ]
+  },
+  {
+    "number": 41,
+    "redAlliance": [
+      38,
+      26,
+      1
+    ],
+    "blueAlliance": [
+      31,
+      15,
+      14
+    ]
+  },
+  {
+    "number": 42,
+    "redAlliance": [
+      20,
+      16,
+      27
+    ],
+    "blueAlliance": [
+      4,
+      24,
+      10
+    ]
+  },
+  {
+    "number": 43,
+    "redAlliance": [
+      32,
+      30,
+      7
+    ],
+    "blueAlliance": [
+      19,
+      39,
+      29
+    ]
+  },
+  {
+    "number": 44,
+    "redAlliance": [
+      40,
+      26,
+      13
+    ],
+    "blueAlliance": [
+      1,
+      8,
+      41
+    ]
+  },
+  {
+    "number": 45,
+    "redAlliance": [
+      33,
+      42,
+      10
+    ],
+    "blueAlliance": [
+      21,
+      3,
+      6
+    ]
+  },
+  {
+    "number": 46,
+    "redAlliance": [
+      38,
+      16,
+      36
+    ],
+    "blueAlliance": [
+      25,
+      34,
+      24
+    ]
+  },
+  {
+    "number": 47,
+    "redAlliance": [
+      31,
+      12,
+      9
+    ],
+    "blueAlliance": [
+      37,
+      14,
+      18
+    ]
+  },
+  {
+    "number": 48,
+    "redAlliance": [
+      17,
+      28,
+      35
+    ],
+    "blueAlliance": [
+      2,
+      23,
+      4
+    ]
+  },
+  {
+    "number": 49,
+    "redAlliance": [
+      22,
+      11,
+      27
+    ],
+    "blueAlliance": [
+      5,
+      20,
+      15
+    ]
+  },
+  {
+    "number": 50,
+    "redAlliance": [
+      6,
+      24,
+      37
+    ],
+    "blueAlliance": [
+      8,
+      3,
+      13
+    ]
+  },
+  {
+    "number": 51,
+    "redAlliance": [
+      25,
+      1,
+      40
+    ],
+    "blueAlliance": [
+      2,
+      10,
+      19
+    ]
+  },
+  {
+    "number": 52,
+    "redAlliance": [
+      29,
+      31,
+      4
+    ],
+    "blueAlliance": [
+      42,
+      7,
+      5
+    ]
+  },
+  {
+    "number": 53,
+    "redAlliance": [
+      27,
+      18,
+      15
+    ],
+    "blueAlliance": [
+      32,
+      33,
+      17
+    ]
+  },
+  {
+    "number": 54,
+    "redAlliance": [
+      38,
+      22,
+      28
+    ],
+    "blueAlliance": [
+      9,
+      39,
+      26
+    ]
+  },
+  {
+    "number": 55,
+    "redAlliance": [
+      34,
+      30,
+      35
+    ],
+    "blueAlliance": [
+      16,
+      41,
+      11
+    ]
+  },
+  {
+    "number": 56,
+    "redAlliance": [
+      36,
+      23,
+      12
+    ],
+    "blueAlliance": [
+      21,
+      14,
+      20
+    ]
+  },
+  {
+    "number": 57,
+    "redAlliance": [
+      17,
+      1,
+      3
+    ],
+    "blueAlliance": [
+      39,
+      7,
+      8
+    ]
+  },
+  {
+    "number": 58,
+    "redAlliance": [
+      16,
+      29,
+      6
+    ],
+    "blueAlliance": [
+      33,
+      31,
+      19
+    ]
+  },
+  {
+    "number": 59,
+    "redAlliance": [
+      20,
+      10,
+      32
+    ],
+    "blueAlliance": [
+      30,
+      28,
+      37
+    ]
+  },
+  {
+    "number": 60,
+    "redAlliance": [
+      12,
+      14,
+      41
+    ],
+    "blueAlliance": [
+      27,
+      25,
+      42
+    ]
+  },
+  {
+    "number": 61,
+    "redAlliance": [
+      26,
+      21,
+      24
+    ],
+    "blueAlliance": [
+      11,
+      35,
+      18
+    ]
+  },
+  {
+    "number": 62,
+    "redAlliance": [
+      5,
+      23,
+      13
+    ],
+    "blueAlliance": [
+      4,
+      9,
+      38
+    ]
+  },
+  {
+    "number": 63,
+    "redAlliance": [
+      2,
+      34,
+      40
+    ],
+    "blueAlliance": [
+      36,
+      15,
+      22
+    ]
+  },
+  {
+    "number": 64,
+    "redAlliance": [
+      24,
+      16,
+      8
+    ],
+    "blueAlliance": [
+      32,
+      42,
+      14
+    ]
+  },
+  {
+    "number": 65,
+    "redAlliance": [
+      9,
+      21,
+      10
+    ],
+    "blueAlliance": [
+      31,
+      7,
+      17
+    ]
+  },
+  {
+    "number": 66,
+    "redAlliance": [
+      41,
+      34,
+      4
+    ],
+    "blueAlliance": [
+      18,
+      12,
+      1
+    ]
+  },
+  {
+    "number": 67,
+    "redAlliance": [
+      29,
+      33,
+      22
+    ],
+    "blueAlliance": [
+      23,
+      11,
+      37
+    ]
+  },
+  {
+    "number": 68,
+    "redAlliance": [
+      15,
+      13,
+      19
+    ],
+    "blueAlliance": [
+      36,
+      3,
+      28
+    ]
+  },
+  {
+    "number": 69,
+    "redAlliance": [
+      5,
+      38,
+      35
+    ],
+    "blueAlliance": [
+      27,
+      40,
+      30
+    ]
+  },
+  {
+    "number": 70,
+    "redAlliance": [
+      20,
+      6,
+      39
+    ],
+    "blueAlliance": [
+      26,
+      2,
+      25
+    ]
+  }
+]

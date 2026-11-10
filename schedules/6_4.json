@@ -1,0 +1,54 @@
+[
+  {
+    "number": 1,
+    "redAlliance": [
+      5,
+      2,
+      1
+    ],
+    "blueAlliance": [
+      6,
+      3,
+      4
+    ]
+  },
+  {
+    "number": 2,
+    "redAlliance": [
+      4,
+      5,
+      3
+    ],
+    "blueAlliance": [
+      1,
+      2,
+      6
+    ]
+  },
+  {
+    "number": 3,
+    "redAlliance": [
+      3,
+      1,
+      6
+    ],
+    "blueAlliance": [
+      2,
+      4,
+      5
+    ]
+  },
+  {
+    "number": 4,
+    "redAlliance": [
+      3,
+      6,
+      2
+    ],
+    "blueAlliance": [
+      1,
+      5,
+      4
+    ]
+  }
+]
