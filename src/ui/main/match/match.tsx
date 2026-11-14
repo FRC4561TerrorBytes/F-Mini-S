@@ -210,7 +210,7 @@ class PlayoffsRunner {
 }
 
 function Match() {
-  
+
   class GlobalStorageBox {
   private data = new Map<string, any>();
   set(name: string, value: any) { this.data.set(name, value); }
@@ -337,14 +337,14 @@ useEffect(() => {
       }
   }
   else{
-  if(periodRed(matchInfo?.period)){
+    if(periodRed(matchInfo?.period)){
       if(cnvtPeriodTime(matchInfo?.matchTime) <= 5){
         if(lastRedColor.current != 'pulse-red'){
         sendDataToHardware('red', 'CMD:LED:PULSE_RED')
         lastRedColor.current = 'pulse-red'
         }
       } else {
-        if(lastRedColor.current != 'red'){
+        if(lastRedColor.current != 'red' && matchInfo?.matchTime < 160){
         sendDataToHardware('red', 'CMD:LED:RED')
         lastRedColor.current = 'red'
         }
@@ -363,15 +363,15 @@ useEffect(() => {
         lastBlueColor.current = 'pulse-blue'
         }
       } else {
-        if(lastBlueColor.current != 'blue'){
-        sendDataToHardware('blue', 'CMD:LED:BLUE')
-        lastBlueColor.current = 'blue'
+        if(lastBlueColor.current != 'blue' && matchInfo?.matchTime < 160){
+          sendDataToHardware('blue', 'CMD:LED:BLUE')
+          lastBlueColor.current = 'blue'
         }
       }
   } else {
     if(lastBlueColor.current != 'off'){
-    sendDataToHardware('blue', 'CMD:LED:OFF')
-    lastBlueColor.current = 'off'
+      sendDataToHardware('blue', 'CMD:LED:OFF')
+      lastBlueColor.current = 'off'
     }
     
   }
@@ -783,11 +783,13 @@ useEffect(() => {
       playSound(sounds.matchStart);
       sendDataToHardware('red', 'CMD:LED:RED');
       sendDataToHardware('blue', 'CMD:LED:BLUE');
+
     }
+
+    //Small delay before the motors automatically start, to ensure the previous command is acked and done
+    await delay(150);
     sendDataToHardware('red', "CMD:MOTOR:ON");
     sendDataToHardware('blue', "CMD:MOTOR:ON");
-
-
   };
 
   const togglePauseMatch = () => {
@@ -815,6 +817,11 @@ useEffect(() => {
     }
 
     setApproveStatus(`Match ${matchInfo.matchNum} approved.`);
+
+    //Turn motors off, wait 100ms to avoid clashing flexhub commands
+    sendDataToHardware('red', "CMD:MOTOR:OFF")
+    sendDataToHardware('blue', "CMD:MOTOR:OFF")
+    await delay(100)
 
     if (matchType === 'playoffs') {
       const winner: 'red' | 'blue' = matchInfo.blue.points > matchInfo.red.points ? 'blue' : 'red';
