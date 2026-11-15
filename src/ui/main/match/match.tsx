@@ -378,6 +378,9 @@ useEffect(() => {
 }
 
   if (matchInfo.period != lastPeriod.current) {
+
+    shift(matchInfo.period)
+
     if(matchInfo.matchTime <= 130)
       playSound(sounds.periodChange);
     lastPeriod.current = matchInfo.period;
@@ -692,16 +695,30 @@ useEffect(() => {
     }
   };
 
+  const shift = async (period: number) => {
+    await sendDataToHardware('red', "CMD:DISPLAY:SHIFT:"+period)
+    await delay(100)
+    await sendDataToHardware('blue', "CMD:DISPLAY:SHIFT:"+period)
+  }
+
   const testRed = async () => {
     await sendDataToHardware('red', "CMD:LED:RED");
     await delay(500);
     await sendDataToHardware('red', "CMD:LED:OFF");
+    await delay(100)
+    await sendDataToHardware('red', 'CMD:DISPLAY:SHIFT:9')
+    await delay(100)
+    await sendDataToHardware('red', 'CMD:DISPLAY:CLOCK:99')
   };
 
   const testBlue = async () => {
     await sendDataToHardware('blue', "CMD:LED:BLUE");
     await delay(500);
     await sendDataToHardware('blue', "CMD:LED:OFF");
+    await delay(100)
+    await sendDataToHardware('red', 'CMD:DISPLAY:SHIFT:9')
+    await delay(100)
+    await sendDataToHardware('red', 'CMD:DISPLAY:CLOCK:99')
   };
 
   const delay = (ms: number): Promise<void> => new Promise(res => setTimeout(res, ms));
@@ -1138,6 +1155,6 @@ useEffect(() => {
       )}
     </div>
   );
-}
+} 
 
 export default Match;

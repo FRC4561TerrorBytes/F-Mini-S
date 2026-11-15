@@ -214,7 +214,7 @@ class Match {
             }
             if (this.info.matchTime === 140) {
                 this.info.autoWin = this.info.blue.points < this.info.red.points ? 'red' : 'blue';
-                this.pause(true);
+                this.pause(false);
             }
             this.broadcast();
         }, 1000);
