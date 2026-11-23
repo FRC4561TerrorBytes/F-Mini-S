@@ -237,6 +237,28 @@ class Match {
         this.broadcast();
     }
 
+    public abandon() {
+        this.stop();
+        this.paused = true;
+        this.info.matchTime = 0;
+        this.info.period = 6;
+        this.info.autoWin = 'none';
+        (['red', 'blue'] as const).forEach(side => {
+            this.info[side].fuelScored = 0;
+            this.info[side].autoFuelScored = 0;
+            this.info[side].autoClimbs = 0;
+            this.info[side].endClimbsL1 = 0;
+            this.info[side].endClimbsL2 = 0;
+            this.info[side].endPark = 0;
+            this.info[side].fouls = 0;
+            this.info[side].tFouls = 0;
+            this.info[side].points = 0;
+            this.info[side].endPoints = 0;
+            this.info[side].rp = 0;
+        });
+        this.broadcast();
+    }
+
     public newMatch(matchNum: number, matchType: 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance : number[], redAllianceNumber: number | null = null, blueAllianceNumber: number | null = null, redFinalsWins = 0, blueFinalsWins = 0) {
         this.stop();
         this.info = this.createDefaultMatchInfo(matchNum, matchType, redAlliance, blueAlliance);
@@ -377,6 +399,7 @@ app.on("ready", () => {
     ipcMain.on("startMatch", () => match.start());
     ipcMain.on("createMatch", (_, matchNum, matchType, redAlliance, blueAlliance, redAllianceNumber, blueAllianceNumber, redFinalsWins, blueFinalsWins) => match.newMatch(matchNum, matchType, redAlliance, blueAlliance, redAllianceNumber, blueAllianceNumber, redFinalsWins, blueFinalsWins));
     ipcMain.on("pauseMatch", (_, state) => match.pause(state));
+    ipcMain.on("abandonMatch", () => match.abandon());
     ipcMain.on("autoClimbs", (_, amt, alliance) => match.autoClimbs(alliance, amt));
 
     ipcMain.on("l1Climbs", (_, amt, alliance) => match.l1Climbs(alliance, amt));

@@ -229,6 +229,7 @@ const sounds = {
   teleStart: new Audio('../../../../../images/resume.wav'),
   matchEnd: new Audio('../../../../../images/end.wav'),
   warning: new Audio('../../../../../images/warning.wav'),
+  foghorn: new Audio('../../../../../images/foghorn.wav'),
 };
 
 const playSound = (sound: HTMLAudioElement) => {
@@ -260,8 +261,6 @@ const playSound = (sound: HTMLAudioElement) => {
   const [info, setInfo] = useState<matchDisplay>();
 
   const [displayOpen, setDisplayOpen] = useState(false);
-  const [isPaused, setIsPaused] = useState<boolean>(false);
-
   const [approveStatus, setApproveStatus] = useState<string>('');
   const [finalsAllianceWins, setFinalsAllianceWins] = useState<Record<number, number>>({});
   const approvedFinalsWinsRef = useRef(new Map<number, number>());
@@ -387,7 +386,7 @@ useEffect(() => {
 
     shift(matchInfo.period)
 
-    if(matchInfo.matchTime <= 130)
+    if(matchInfo.matchTime > 0 && matchInfo.matchTime <= 130)
       playSound(sounds.periodChange);
     lastPeriod.current = matchInfo.period;
   }
@@ -826,10 +825,10 @@ useEffect(() => {
     sendDataToHardware('blue', "CMD:MOTOR:ON");
   };
 
-  const togglePauseMatch = () => {
-    const nextState = !isPaused;
-    setIsPaused(nextState);
-    window.myAPI.pauseMatch(nextState);
+  const abandonMatch = () => {
+    playSound(sounds.foghorn)
+    window.myAPI.abandonMatch();
+    setApproveStatus('Match abandoned. Timer set to 0 and alliance scores cleared.');
   };
 
  const handleMetricAdjustment = (
@@ -1095,9 +1094,7 @@ useEffect(() => {
 
       <div style={{ marginTop: '15px', display: 'flex', gap: '10px' }}>
         <button className='match-start' onClick={() => startMatch()}>Play Match</button>
-        <button className='match-start' onClick={togglePauseMatch}>
-          {isPaused ? "Resume Match" : "Pause Match"}
-        </button>
+        <button className='match-start' onClick={abandonMatch}>Abandon Match</button>
         <button className='match-start' onClick={approveAndAdvance} disabled={!matchInfo}>
           Approve Match & Advance
         </button>

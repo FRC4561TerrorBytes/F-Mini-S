@@ -128,6 +128,7 @@ export interface IElectronAPI {
     startMatch: () => void;
     createMatch: (matchNum : number, matchType : 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance : number[], redAllianceNumber?: number | null, blueAllianceNumber?: number | null, redFinalsWins?: number, blueFinalsWins?: number) => void;
     pauseMatch: (state : boolean) => void;
+    abandonMatch: () => void;
     autoClimbs: (amt : number, alliance : 'red' | 'blue') => void;
     l1Climbs: (amt : number, alliance : 'red' | 'blue') => void;
     l2Climbs: (amt : number, alliance : 'red' | 'blue') => void;
@@ -220,6 +221,10 @@ const api: IElectronAPI = {
 
     pauseMatch: (state : boolean) => {
         ipcRenderer.send('pauseMatch', state);
+    },
+
+    abandonMatch: () => {
+        ipcRenderer.send('abandonMatch');
     },
 
     autoClimbs: (amt : number, alliance : 'red' | 'blue') => {
