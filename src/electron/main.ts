@@ -53,6 +53,10 @@ type matchInfo = {
     matchType : 'qualifications' | 'playoffs' | 'finals',
     autoWin : 'red' | 'blue' | 'none',
     period: number,
+    redAllianceNumber: number | null,
+    blueAllianceNumber: number | null,
+    redFinalsWins: number,
+    blueFinalsWins: number,
     red: alliancePerformance,
     blue: alliancePerformance
 }
@@ -75,6 +79,7 @@ class Match {
 
         return {
             matchNum, matchTime: 160, matchType, autoWin: 'none', period: 1,
+            redAllianceNumber: null, blueAllianceNumber: null, redFinalsWins: 0, blueFinalsWins: 0,
             red: blankAlliance(redAlliance),
             blue: blankAlliance(blueAlliance)
         };
@@ -232,9 +237,13 @@ class Match {
         this.broadcast();
     }
 
-    public newMatch(matchNum: number, matchType: 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance : number[]) {
+    public newMatch(matchNum: number, matchType: 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance : number[], redAllianceNumber: number | null = null, blueAllianceNumber: number | null = null, redFinalsWins = 0, blueFinalsWins = 0) {
         this.stop();
         this.info = this.createDefaultMatchInfo(matchNum, matchType, redAlliance, blueAlliance);
+        this.info.redAllianceNumber = redAllianceNumber;
+        this.info.blueAllianceNumber = blueAllianceNumber;
+        this.info.redFinalsWins = redFinalsWins;
+        this.info.blueFinalsWins = blueFinalsWins;
         this.pause(true);
         this.broadcast();
     }
@@ -366,7 +375,7 @@ app.on("ready", () => {
     });
 
     ipcMain.on("startMatch", () => match.start());
-    ipcMain.on("createMatch", (_, matchNum, matchType, redAlliance, blueAlliance) => match.newMatch(matchNum, matchType, redAlliance, blueAlliance));
+    ipcMain.on("createMatch", (_, matchNum, matchType, redAlliance, blueAlliance, redAllianceNumber, blueAllianceNumber, redFinalsWins, blueFinalsWins) => match.newMatch(matchNum, matchType, redAlliance, blueAlliance, redAllianceNumber, blueAllianceNumber, redFinalsWins, blueFinalsWins));
     ipcMain.on("pauseMatch", (_, state) => match.pause(state));
     ipcMain.on("autoClimbs", (_, amt, alliance) => match.autoClimbs(alliance, amt));
 

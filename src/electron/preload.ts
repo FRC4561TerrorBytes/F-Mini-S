@@ -73,6 +73,10 @@ type matchInfo = {
   matchTime : number;
   autoWin: 'red' | 'blue' | 'none';
   period: number;
+  redAllianceNumber: number | null;
+  blueAllianceNumber: number | null;
+  redFinalsWins: number;
+  blueFinalsWins: number;
   red: alliancePerformance;
   blue: alliancePerformance;
 };
@@ -122,7 +126,7 @@ export interface IElectronAPI {
 
     sendFuel: (alliance : string) => void;
     startMatch: () => void;
-    createMatch: (matchNum : number, matchType : 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance : number[]) => void;
+    createMatch: (matchNum : number, matchType : 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance : number[], redAllianceNumber?: number | null, blueAllianceNumber?: number | null, redFinalsWins?: number, blueFinalsWins?: number) => void;
     pauseMatch: (state : boolean) => void;
     autoClimbs: (amt : number, alliance : 'red' | 'blue') => void;
     l1Climbs: (amt : number, alliance : 'red' | 'blue') => void;
@@ -210,8 +214,8 @@ const api: IElectronAPI = {
         ipcRenderer.send('startMatch');
     },
 
-    createMatch: (matchNum : number, matchType : 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance: number[]) => {
-        ipcRenderer.send('createMatch', matchNum, matchType, redAlliance, blueAlliance);
+    createMatch: (matchNum : number, matchType : 'qualifications' | 'finals' | 'playoffs', redAlliance : number[], blueAlliance: number[], redAllianceNumber?: number | null, blueAllianceNumber?: number | null, redFinalsWins?: number, blueFinalsWins?: number) => {
+        ipcRenderer.send('createMatch', matchNum, matchType, redAlliance, blueAlliance, redAllianceNumber, blueAllianceNumber, redFinalsWins, blueFinalsWins);
     },
 
     pauseMatch: (state : boolean) => {

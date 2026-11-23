@@ -58,6 +58,10 @@ type MatchInfoType = {
   matchTime: number;
   autoWin: 'red' | 'blue' | 'none';
   period: number;
+  redAllianceNumber: number | null;
+  blueAllianceNumber: number | null;
+  redFinalsWins: number;
+  blueFinalsWins: number;
   red: alliancePerformance;
   blue: alliancePerformance;
 };
@@ -259,6 +263,8 @@ const playSound = (sound: HTMLAudioElement) => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
 
   const [approveStatus, setApproveStatus] = useState<string>('');
+  const [finalsAllianceWins, setFinalsAllianceWins] = useState<Record<number, number>>({});
+  const approvedFinalsWinsRef = useRef(new Map<number, number>());
 
   const playoffsRunnerRef = useRef(new PlayoffsRunner());
 
@@ -787,7 +793,18 @@ useEffect(() => {
 
   const newMatch = async (matchNum: number, type: 'qualifications' | 'playoffs' | 'finals', redAlliance: number[], blueAlliance: number[]) => {
 
-    await window.myAPI.createMatch(matchNum, type, redAlliance, blueAlliance);
+    const matchup = type === 'playoffs' ? playoffsRunnerRef.current.getMatchup(matchNum) : null;
+    const allianceNumberForTeams = (teams: number[]) => {
+      const index = alliances.findIndex(alliance => alliance.teams.every((team, i) => team === teams[i]));
+      return index >= 0 ? index + 1 : null;
+    };
+    const redAllianceNumber = type === 'playoffs' ? matchup?.red ?? null : type === 'finals' ? allianceNumberForTeams(redAlliance) : null;
+    const blueAllianceNumber = type === 'playoffs' ? matchup?.blue ?? null : type === 'finals' ? allianceNumberForTeams(blueAlliance) : null;
+    await window.myAPI.createMatch(
+      matchNum, type, redAlliance, blueAlliance, redAllianceNumber, blueAllianceNumber,
+      finalsAllianceWins[redAllianceNumber ?? -1] ?? 0,
+      finalsAllianceWins[blueAllianceNumber ?? -1] ?? 0
+    );
     setApproveStatus('');
     sendDataToHardware('red', 'CMD:LED:GREEN');
     sendDataToHardware('blue', 'CMD:LED:GREEN');
@@ -850,6 +867,19 @@ useEffect(() => {
       const nextNum = selectedMatch + 1;
       setSelectedMatch(nextNum);
       updateQualAlliance(nextNum);
+    } else if (matchType === 'finals') {
+      const winningAllianceNumber = matchInfo.red.points === matchInfo.blue.points
+        ? null
+        : matchInfo.red.points > matchInfo.blue.points
+          ? matchInfo.redAllianceNumber
+          : matchInfo.blueAllianceNumber;
+      if (winningAllianceNumber != null) {
+        approvedFinalsWinsRef.current.set(matchInfo.matchNum, winningAllianceNumber);
+        setFinalsAllianceWins(previous => ({
+          ...previous,
+          [winningAllianceNumber]: (previous[winningAllianceNumber] ?? 0) + 1
+        }));
+      }
     }
 
   };
@@ -857,6 +887,16 @@ useEffect(() => {
   const undoApproval = async () => {
     if (!matchInfo) return;
     const success = await window.myAPI.undoMatchApproval(matchInfo.matchNum, matchInfo.matchType);
+    if (success && matchInfo.matchType === 'finals') {
+      const winningAllianceNumber = approvedFinalsWinsRef.current.get(matchInfo.matchNum);
+      if (winningAllianceNumber != null) {
+        approvedFinalsWinsRef.current.delete(matchInfo.matchNum);
+        setFinalsAllianceWins(previous => ({
+          ...previous,
+          [winningAllianceNumber]: Math.max(0, (previous[winningAllianceNumber] ?? 0) - 1)
+        }));
+      }
+    }
     setApproveStatus(success ? `Match ${matchInfo.matchNum} approval undone — rescoring is safe.` : 'Nothing to undo for this match.');
   };
 

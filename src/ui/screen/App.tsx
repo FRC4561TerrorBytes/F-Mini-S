@@ -42,6 +42,10 @@ type matchInfo = {
     matchType: 'qualifications' | 'playoffs' | 'finals',
     autoWin: 'red' | 'blue' | 'none',
     period: number,
+    redAllianceNumber: number | null,
+    blueAllianceNumber: number | null,
+    redFinalsWins: number,
+    blueFinalsWins: number,
     red: alliancePerformance,
     blue: alliancePerformance
 }
@@ -110,6 +114,7 @@ function App() {
     const [dis, setDis] = useState(0);
     const [rankings, setRankings] = useState<TeamRank[]>([]);
     const [historicalResults, setHistoricalResults] = useState<matchResultFile[]>([]);
+    const [historicalResultsLoaded, setHistoricalResultsLoaded] = useState(false);
     const [videoPlaying, setVideoPlaying] = useState<boolean>(false);
 
     const webcamRef = useRef<Webcam | null>(null);
@@ -280,6 +285,26 @@ const playSound = (sound: HTMLAudioElement) => {
         return () => unsub();
     }, [dis]);
 
+    useEffect(() => {
+        if (dis !== 1) return;
+
+        let cancelled = false;
+        setHistoricalResultsLoaded(false);
+        window.myAPI.getMatchResultFiles()
+            .then(files => {
+                if (!cancelled) {
+                    setHistoricalResults(files ?? []);
+                    setHistoricalResultsLoaded(true);
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load match history for high-score check', err);
+                if (!cancelled) setHistoricalResultsLoaded(false);
+            });
+
+        return () => { cancelled = true; };
+    }, [dis]);
+
     const activeDeviceId = camId || fallbackId;
 
     const videoConstraints = {
@@ -363,7 +388,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                     </div>
                                     <div className='blue'>
                                         {((matchInfo?.matchType ?? 'playoffs') !== 'qualifications') && (
-                                            <h1 className='blue-name'>{info?.blueName ?? "None"}</h1>
+                                            <h1 className='blue-name'>{(matchInfo?.matchType === 'playoffs' || matchInfo?.matchType === 'finals') && matchInfo.blueAllianceNumber != null ? `Alliance ${matchInfo.blueAllianceNumber}` : info?.blueName ?? "None"}</h1>
                                         )}
                                         <div className='blue-teams-box'>
                                             {[0, 1, 2].map(i => (
@@ -391,7 +416,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                     </div>
                                     <div className='red'>
                                         {((matchInfo?.matchType ?? 'playoffs') !== 'qualifications') && (
-                                            <h1 className='red-name'>{info?.redName ?? "None"}</h1>
+                                            <h1 className='red-name'>{(matchInfo?.matchType === 'playoffs' || matchInfo?.matchType === 'finals') && matchInfo.redAllianceNumber != null ? `Alliance ${matchInfo.redAllianceNumber}` : info?.redName ?? "None"}</h1>
                                         )}
                                         <div className='red-teams-box'>
                                             {[0, 1, 2].map(i => (
@@ -447,7 +472,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                 <div className='red-info'>
                                     <div className='red'>
                                         {((matchInfo?.matchType ?? 'playoffs') !== 'qualifications') && (
-                                            <h1 className='red-name'>{info?.redName ?? "None"}</h1>
+                                            <h1 className='red-name'>{(matchInfo?.matchType === 'playoffs' || matchInfo?.matchType === 'finals') && matchInfo.redAllianceNumber != null ? `Alliance ${matchInfo.redAllianceNumber}` : info?.redName ?? "None"}</h1>
                                         )}
                                         <div className='red-teams-box'>
                                             {[0, 1, 2].map(i => (
@@ -477,7 +502,7 @@ const playSound = (sound: HTMLAudioElement) => {
                                 <div className='blue-info'>
                                     <div className='blue'>
                                         {((matchInfo?.matchType ?? 'playoffs') !== 'qualifications') && (
-                                            <h1 className='blue-name'>{info?.blueName ?? "None"}</h1>
+                                            <h1 className='blue-name'>{(matchInfo?.matchType === 'playoffs' || matchInfo?.matchType === 'finals') && matchInfo.blueAllianceNumber != null ? `Alliance ${matchInfo.blueAllianceNumber}` : info?.blueName ?? "None"}</h1>
                                         )}
                                         <div className='blue-teams-box'>
                                             {[0, 1, 2].map(i => (
@@ -543,6 +568,14 @@ const playSound = (sound: HTMLAudioElement) => {
 
         const redRP = frozenMatchInfo?.red?.rp ?? 0;
         const blueRP = frozenMatchInfo?.blue?.rp ?? 0;
+        const currentMatchNumber = frozenMatchInfo?.matchNum;
+        const currentMatchType = frozenMatchInfo?.matchType;
+        const previousTournamentHigh = historicalResults.reduce((highest, result) => {
+            if (result.matchNumber === currentMatchNumber && result.matchType === currentMatchType) return highest;
+            return Math.max(highest, result.alliance[0].points, result.alliance[1].points);
+        }, Number.NEGATIVE_INFINITY);
+        const redIsUniqueTournamentHigh = historicalResultsLoaded && redTotal > blueTotal && redTotal > previousTournamentHigh;
+        const blueIsUniqueTournamentHigh = historicalResultsLoaded && blueTotal > redTotal && blueTotal > previousTournamentHigh;
 
         return (
             <div style={{ width: '100vw', height: '100vh', background: 'radial-gradient(circle at center, #1a1a1a 0%, #000 100%)', display: 'flex', flexDirection: 'column', padding: '0', boxSizing: 'border-box', overflow: 'hidden' }}>
@@ -556,6 +589,14 @@ const playSound = (sound: HTMLAudioElement) => {
                 <div style={{ display: 'flex', width: '100vw', flex: '1', alignItems: 'stretch', justifyContent: 'center', padding: '20px 40px', gap: '20px', boxSizing: 'border-box' }}>
                     <div style={{ flex: '1', background: '#c22', border: winner === 'red' ? '8px solid #ffde00' : '4px solid #722', borderRadius: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '30px', boxShadow: winner === 'red' ? '0 0 40px rgba(255,222,0,0.4)' : '0 10px 20px rgba(0,0,0,0.5)', transform: winner === 'red' ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.3s' }}>
                         <div>
+                            {redIsUniqueTournamentHigh && (
+                                <div style={{ textAlign: 'center', background: '#ffde00', border: '4px solid #000', borderRadius: '12px', padding: '10px', marginBottom: '12px', color: '#000', fontSize: '24px', fontWeight: '900', textTransform: 'uppercase' }}>
+                                    Tournament High Score
+                                </div>
+                            )}
+                            {(frozenMatchInfo?.matchType === 'playoffs' || frozenMatchInfo?.matchType === 'finals') && frozenMatchInfo.redAllianceNumber != null && (
+                                <div style={{ textAlign: 'center', fontSize: '28px', fontWeight: '900', color: '#fff', textShadow: '3px 3px 0px #000', marginBottom: '12px' }}>Alliance {frozenMatchInfo.redAllianceNumber}</div>
+                            )}
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', background: '#722', padding: '15px', borderRadius: '16px', border: '4px solid #000' }}>
                                 {[0, 1, 2].map(i => (
                                     <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -570,9 +611,15 @@ const playSound = (sound: HTMLAudioElement) => {
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 'auto 0' }}>
                             <div style={{ fontSize: '14vw', fontWeight: '950', color: '#fff', lineHeight: '1', textShadow: '8px 8px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000' }}>{redTotal}</div>
                         </div>
-                        <div style={{ background: '#ffde00', border: '5px solid #000', borderRadius: '16px', padding: '15px', textAlign: 'center', boxShadow: '0 6px 0px #000' }}>
-                            <span style={{ fontSize: '28px', fontWeight: '900', color: '#000', textTransform: 'uppercase' }}>+{redRP} RANKING POINTS</span>
-                        </div>
+                        {frozenMatchInfo?.matchType === 'finals' ? (
+                            <div style={{ background: '#ffde00', border: '5px solid #000', borderRadius: '16px', padding: '15px', textAlign: 'center', boxShadow: '0 6px 0px #000' }}>
+                                <span style={{ fontSize: '28px', fontWeight: '900', color: '#000', textTransform: 'uppercase' }}>{(frozenMatchInfo.redFinalsWins ?? 0) + (winner === 'red' ? 1 : 0)} VICTORIES</span>
+                            </div>
+                        ) : frozenMatchInfo?.matchType !== 'playoffs' && (
+                            <div style={{ background: '#ffde00', border: '5px solid #000', borderRadius: '16px', padding: '15px', textAlign: 'center', boxShadow: '0 6px 0px #000' }}>
+                                <span style={{ fontSize: '28px', fontWeight: '900', color: '#000', textTransform: 'uppercase' }}>+{redRP} RANKING POINTS</span>
+                            </div>
+                        )}
                     </div>
 
                     <div style={{ width: '38vw', background: '#222', border: '5px solid #444', borderRadius: '24px', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
@@ -603,6 +650,14 @@ const playSound = (sound: HTMLAudioElement) => {
 
                     <div style={{ flex: '1', background: '#22c', border: winner === 'blue' ? '8px solid #ffde00' : '4px solid #227', borderRadius: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '30px', boxShadow: winner === 'blue' ? '0 0 40px rgba(255,222,0,0.4)' : '0 10px 20px rgba(0,0,0,0.5)', transform: winner === 'blue' ? 'scale(1.02)' : 'scale(1)', transition: 'transform 0.3s' }}>
                         <div>
+                            {blueIsUniqueTournamentHigh && (
+                                <div style={{ textAlign: 'center', background: '#ffde00', border: '4px solid #000', borderRadius: '12px', padding: '10px', marginBottom: '12px', color: '#000', fontSize: '24px', fontWeight: '900', textTransform: 'uppercase' }}>
+                                    Tournament High Score
+                                </div>
+                            )}
+                            {(frozenMatchInfo?.matchType === 'playoffs' || frozenMatchInfo?.matchType === 'finals') && frozenMatchInfo.blueAllianceNumber != null && (
+                                <div style={{ textAlign: 'center', fontSize: '28px', fontWeight: '900', color: '#fff', textShadow: '3px 3px 0px #000', marginBottom: '12px' }}>Alliance {frozenMatchInfo.blueAllianceNumber}</div>
+                            )}
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', background: '#227', padding: '15px', borderRadius: '16px', border: '4px solid #000' }}>
                                 {[0, 1, 2].map(i => (
                                     <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -617,9 +672,15 @@ const playSound = (sound: HTMLAudioElement) => {
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 'auto 0' }}>
                             <div style={{ fontSize: '14vw', fontWeight: '950', color: '#fff', lineHeight: '1', textShadow: '8px 8px 0px #000, -2px -2px 0px #000, 2px -2px 0px #000, -2px 2px 0px #000' }}>{blueTotal}</div>
                         </div>
-                        <div style={{ background: '#ffde00', border: '5px solid #000', borderRadius: '16px', padding: '15px', textAlign: 'center', boxShadow: '0 6px 0px #000' }}>
-                            <span style={{ fontSize: '28px', fontWeight: '900', color: '#000', textTransform: 'uppercase' }}>+{blueRP} RANKING POINTS</span>
-                        </div>
+                        {frozenMatchInfo?.matchType === 'finals' ? (
+                            <div style={{ background: '#ffde00', border: '5px solid #000', borderRadius: '16px', padding: '15px', textAlign: 'center', boxShadow: '0 6px 0px #000' }}>
+                                <span style={{ fontSize: '28px', fontWeight: '900', color: '#000', textTransform: 'uppercase' }}>{(frozenMatchInfo.blueFinalsWins ?? 0) + (winner === 'blue' ? 1 : 0)} VICTORIES</span>
+                            </div>
+                        ) : frozenMatchInfo?.matchType !== 'playoffs' && (
+                            <div style={{ background: '#ffde00', border: '5px solid #000', borderRadius: '16px', padding: '15px', textAlign: 'center', boxShadow: '0 6px 0px #000' }}>
+                                <span style={{ fontSize: '28px', fontWeight: '900', color: '#000', textTransform: 'uppercase' }}>+{blueRP} RANKING POINTS</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
